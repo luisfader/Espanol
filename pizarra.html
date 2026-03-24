@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pizarra Colaborativa Zoom - Tiempo Real</title>
+    <!-- Firebase SDKs (versión 9 modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, push, update, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        
+        // Configuración de Firebase (usando una base de datos de demostración pública)
+        // ¡IMPORTANTE! Para producción, reemplaza con tus propias credenciales.
+        // Esta configuración es de ejemplo con reglas de seguridad públicas (solo para demostración)
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6J0rL5nZqQ8zLxV9wP2mN3xR7YtKjH1E",
+            authDomain: "pizarra-zoom-demo.firebaseapp.com",
+            databaseURL: "https://pizarra-zoom-demo-default-rtdb.firebaseio.com",
+            projectId: "pizarra-zoom-demo",
+            storageBucket: "pizarra-zoom-demo.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+        
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // Referencia a la pizarra en tiempo real
+        const canvasRef = ref(db, 'pizarra');
+        
+        // Variable para controlar si es el profesor (quien escribe)
+        // Por defecto, el primer usuario que abre la página puede ser el profesor
+        // pero permitimos cambiar rol con un botón
+        let isTeacher = false;
+        let teacherId = null;
+        let currentUserId = Math.random().toString(36).substring(2, 10);
+        
+        // Elementos del DOM
+        const canvas = document.getElementById('whiteboard');
+        const ctx = canvas.getContext('2d');
+        const clearBtn = document.getElementById('clearBtn');
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSize = document.getElementById('brushSize');
+        const sizeValue = document.getElementById('sizeValue');
+        const teacherBtn = document.getElementById('teacherBtn');
+        const statusDiv = document.getElementById('status');
+        
+        // Variables de dibujo
+        let drawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let currentColor = colorPicker.value;
+        let currentBrushSize = brushSize.value;
+        
+        // Configurar canvas responsive
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            // Guardar el contenido actual para redibujar después del resize
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            canvas.width = rect.width;
+            canvas.height = rect.height - 10; // pequeño margen
+            ctx.putImageData(imageData, 0, 0);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = currentBrushSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        
+        // Inicializar canvas
+        function initCanvas() {
+            const container = canvas.parentElement;
+            const rect = container.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height - 10;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = currentBrushSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        
+        // Dibujar en el canvas local
+        function drawLocal(x, y, isStart) {
+            if (isStart) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            }
+        }
+        
+        // Enviar evento de dibujo a Firebase (solo si es profesor)
+        function sendDrawEvent(data) {
+            if (!isTeacher) return;
+            
+            const drawEvent = {
+                type: 'draw',
+                x: data.x,
+                y: data.y,
+                color: data.color || currentColor,
+                size: data.size || currentBrushSize,
+                isStart: data.isStart,
+                timestamp: serverTimestamp(),
+                userId: currentUserId
+            };
+            
+            // Usar push para agregar eventos (mejor que sobrescribir todo)
+            const eventsRef = ref(db, 'pizarra/events');
+            push(eventsRef, drawEvent).catch(err => console.error('Error al enviar:', err));
+        }
+        
+        // Enviar evento de limpiar pizarra
+        function sendClearEvent() {
+            if (!isTeacher) return;
+            
+            const clearEvent = {
+                type: 'clear',
+                timestamp: serverTimestamp(),
+                userId: currentUserId
+            };
+            
+            const eventsRef = ref(db, 'pizarra/events');
+            push(eventsRef, clearEvent);
+            
+            // También limpiar localmente
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Aplicar evento recibido de Firebase
+        function applyDrawEvent(event) {
+            if (!event || event.type !== 'draw') return;
+            
+            // Guardar estado actual del canvas
+            ctx.save();
+            ctx.strokeStyle = event.color;
+            ctx.lineWidth = event.size;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            if (event.isStart) {
+                ctx.beginPath();
+                ctx.moveTo(event.x, event.y);
+                ctx.lineTo(event.x, event.y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(event.x, event.y);
+            } else {
+                ctx.lineTo(event.x, event.y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(event.x, event.y);
+            }
+            
+            ctx.restore();
+        }
+        
+        function applyClearEvent() {
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        // Escuchar eventos en tiempo real desde Firebase
+        function listenToBoard() {
+            const eventsRef = ref(db, 'pizarra/events');
+            onValue(eventsRef, (snapshot) => {
+                const data = snapshot.val();
+                if (!data) return;
+                
+                // Obtener todos los eventos ordenados por timestamp (aproximadamente)
+                const events = Object.values(data);
+                // Ordenar por timestamp si existe
+                events.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                
+                // Para evitar procesar eventos duplicados al cargar, podemos limpiar el canvas
+                // pero mejor aplicamos solo los nuevos? Simplificamos: limpiar y reaplicar todo
+                // Solo si hay eventos de tipo clear, o si es la primera carga
+                // Para optimizar: guardar el último evento procesado (por simplicidad, aplicamos todos)
+                // Pero esto podría ser lento. Mejor: mantener un contador de eventos procesados.
+                if (window.lastProcessedCount !== events.length) {
+                    // Si hay un evento clear, limpiamos antes de reaplicar
+                    const hasClear = events.some(e => e.type === 'clear');
+                    if (hasClear) {
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
+                    
+                    // Aplicar todos los eventos en orden
+                    events.forEach(event => {
+                        if (event.type === 'draw') {
+                            applyDrawEvent(event);
+                        } else if (event.type === 'clear') {
+                            ctx.fillStyle = '#FFFFFF';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        }
+                    });
+                    window.lastProcessedCount = events.length;
+                }
+            }, (error) => {
+                console.error('Error al escuchar eventos:', error);
+                statusDiv.textContent = '⚠️ Error de conexión. Reintentando...';
+                statusDiv.style.backgroundColor = '#ffebee';
+            });
+        }
+        
+        // Función para reclamar rol de profesor
+        function claimTeacher() {
+            if (teacherId && teacherId !== currentUserId) {
+                const confirmSwitch = confirm('¿Seguro que quieres tomar el control de la pizarra? El profesor actual perderá los permisos de escritura.');
+                if (!confirmSwitch) return;
+            }
+            
+            isTeacher = true;
+            teacherId = currentUserId;
+            localStorage.setItem('zoomWhiteboardTeacher', currentUserId);
+            teacherBtn.textContent = '👩‍🏫 Modo Profesor (Activo)';
+            teacherBtn.style.backgroundColor = '#4caf50';
+            teacherBtn.style.color = 'white';
+            statusDiv.innerHTML = '✅ Modo PROFESOR activado - Tus alumnos verán lo que dibujes en tiempo real';
+            statusDiv.style.backgroundColor = '#e8f5e9';
+            
+            // Registrar en Firebase que este usuario es el profesor actual
+            const teacherRef = ref(db, 'pizarra/teacher');
+            set(teacherRef, {
+                userId: currentUserId,
+                timestamp: serverTimestamp()
+            });
+            
+            // Cuando el profesor se desconecta, liberar el rol
+            onDisconnect(teacherRef).remove();
+        }
+        
+        // Verificar si hay un profesor activo
+        function checkActiveTeacher() {
+            const teacherRef = ref(db, 'pizarra/teacher');
+            onValue(teacherRef, (snapshot) => {
+                const teacherData = snapshot.val();
+                if (teacherData && teacherData.userId) {
+                    teacherId = teacherData.userId;
+                    if (teacherId === currentUserId) {
+                        if (!isTeacher) {
+                            isTeacher = true;
+                            teacherBtn.textContent = '👩‍🏫 Modo Profesor (Activo)';
+                            teacherBtn.style.backgroundColor = '#4caf50';
+                            statusDiv.innerHTML = '✅ Modo PROFESOR activado';
+                            statusDiv.style.backgroundColor = '#e8f5e9';
+                        }
+                    } else {
+                        if (isTeacher && teacherId !== currentUserId) {
+                            isTeacher = false;
+                            teacherBtn.textContent = '👨‍🏫 Tomar control (Ser Profesor)';
+                            teacherBtn.style.backgroundColor = '#2196f3';
+                            statusDiv.innerHTML = '📝 Modo ALUMNO - Visualizando pizarra en tiempo real';
+                            statusDiv.style.backgroundColor = '#e3f2fd';
+                        } else if (!isTeacher) {
+                            statusDiv.innerHTML = '📝 Modo ALUMNO - Visualizando pizarra en tiempo real';
+                            statusDiv.style.backgroundColor = '#e3f2fd';
+                        }
+                    }
+                } else {
+                    // No hay profesor, el primer usuario puede tomar control
+                    if (!isTeacher && !teacherId) {
+                        statusDiv.innerHTML = '🎓 No hay profesor activo. Haz clic en "Tomar control" para empezar a escribir.';
+                        statusDiv.style.backgroundColor = '#fff3e0';
+                    } else if (teacherId === null) {
+                        teacherId = null;
+                        if (isTeacher) {
+                            // El profesor perdió la conexión, desactivar modo profesor local
+                            isTeacher = false;
+                            teacherBtn.textContent = '👨‍🏫 Tomar control (Ser Profesor)';
+                            teacherBtn.style.backgroundColor = '#2196f3';
+                            statusDiv.innerHTML = '🎓 El profesor se ha desconectado. Puedes tomar el control.';
+                            statusDiv.style.backgroundColor = '#fff3e0';
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Eventos del mouse/touch para dibujar
+        function getCanvasCoordinates(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            let x = (clientX - rect.left) * scaleX;
+            let y = (clientY - rect.top) * scaleY;
+            
+            x = Math.min(Math.max(0, x), canvas.width);
+            y = Math.min(Math.max(0, y), canvas.height);
+            
+            return { x, y };
+        }
+        
+        function startDrawing(e) {
+            if (!isTeacher) return;
+            e.preventDefault();
+            
+            const { x, y } = getCanvasCoordinates(e);
+            drawing = true;
+            lastX = x;
+            lastY = y;
+            
+            // Dibujar punto
+            drawLocal(x, y, true);
+            sendDrawEvent({
+                x: x,
+                y: y,
+                color: currentColor,
+                size: currentBrushSize,
+                isStart: true
+            });
+        }
+        
+        function draw(e) {
+            if (!isTeacher || !drawing) return;
+            e.preventDefault();
+            
+            const { x, y } = getCanvasCoordinates(e);
+            drawLocal(x, y, false);
+            sendDrawEvent({
+                x: x,
+                y: y,
+                color: currentColor,
+                size: currentBrushSize,
+                isStart: false
+            });
+            lastX = x;
+            lastY = y;
+        }
+        
+        function stopDrawing(e) {
+            if (!isTeacher) return;
+            drawing = false;
+            ctx.beginPath();
+        }
+        
+        // Limpiar pizarra (solo profesor)
+        function clearBoard() {
+            if (!isTeacher) {
+                alert('Solo el profesor puede limpiar la pizarra');
+                return;
+            }
+            sendClearEvent();
+        }
+        
+        // Cambiar color
+        function changeColor() {
+            currentColor = colorPicker.value;
+            if (isTeacher) {
+                ctx.strokeStyle = currentColor;
+            }
+        }
+        
+        // Cambiar tamaño pincel
+        function changeBrushSize() {
+            currentBrushSize = brushSize.value;
+            sizeValue.textContent = currentBrushSize;
+            if (isTeacher) {
+                ctx.lineWidth = currentBrushSize;
+            }
+        }
+        
+        // Configurar eventos de UI
+        function setupEventListeners() {
+            // Mouse events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+            
+            // Touch events para móviles
+            canvas.addEventListener('touchstart', startDrawing);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('touchend', stopDrawing);
+            canvas.addEventListener('touchcancel', stopDrawing);
+            
+            // Botones
+            clearBtn.addEventListener('click', clearBoard);
+            colorPicker.addEventListener('change', changeColor);
+            brushSize.addEventListener('change', changeBrushSize);
+            teacherBtn.addEventListener('click', claimTeacher);
+            
+            // Evitar scroll en touch
+            canvas.addEventListener('touchstart', (e) => {
+                if (e.target === canvas) {
+                    e.preventDefault();
+                }
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                if (e.target === canvas) {
+                    e.preventDefault();
+                }
+            });
+        }
+        
+        // Generar ID único para la sesión
+        function initSession() {
+            // Revisar si había un profesor guardado localmente
+            const savedTeacher = localStorage.getItem('zoomWhiteboardTeacher');
+            if (savedTeacher === currentUserId) {
+                // Intentar reclamar automáticamente
+                setTimeout(() => {
+                    claimTeacher();
+                }, 500);
+            }
+            
+            // Inicializar canvas
+            initCanvas();
+            window.addEventListener('resize', () => {
+                // Guardar contenido actual antes de redimensionar
+                const currentImage = canvas.toDataURL();
+                resizeCanvas();
+                const img = new Image();
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                img.src = currentImage;
+            });
+            
+            setupEventListeners();
+            listenToBoard();
+            checkActiveTeacher();
+            
+            // Actualizar estado del pincel para el profesor
+            setInterval(() => {
+                if (isTeacher) {
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = currentBrushSize;
+                }
+            }, 100);
+        }
+        
+        // Iniciar aplicación
+        initSession();
+        
+        // Exportar algunas funciones para debug (opcional)
+        window.debug = {
+            setTeacher: claimTeacher,
+            clear: clearBoard
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* Evita selección de texto en la pizarra */
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .board-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .toolbar {
+            background: #2c3e50;
+            padding: 12px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .tools-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+        
+        .tool-group label {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        #colorPicker {
+            width: 40px;
+            height: 40px;
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            background: transparent;
+            padding: 0;
+            outline: none;
+        }
+        
+        #brushSize {
+            width: 100px;
+            cursor: pointer;
+        }
+        
+        #sizeValue {
+            color: white;
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        button {
+            background: #3498db;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #clearBtn {
+            background: #e74c3c;
+        }
+        
+        #teacherBtn {
+            background: #2196f3;
+        }
+        
+        .status-bar {
+            background: #ecf0f1;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #bdc3c7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        #status {
+            flex: 1;
+            color: #2c3e50;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2ecc71;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .canvas-wrapper {
+            flex: 1;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        
+        #whiteboard {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+            background: white;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        
+        .info-footer {
+            background: #34495e;
+            color: white;
+            padding: 8px 20px;
+            font-size: 12px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .connection-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .live-badge {
+            background: #e74c3c;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .tool-group {
+                padding: 3px 8px;
+            }
+            
+            button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            #colorPicker {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .status-bar {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            
+            .info-footer {
+                font-size: 10px;
+            }
+        }
+        
+        /* Estilo para móviles */
+        @media (max-width: 600px) {
+            .tools-left {
+                gap: 8px;
+            }
+            
+            .tool-group label {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="board-container">
+    <div class="toolbar">
+        <div class="tools-left">
+            <div class="tool-group">
+                <label>🎨 Color</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+            <div class="tool-group">
+                <label>✏️ Tamaño</label>
+                <input type="range" id="brushSize" min="2" max="40" value="5">
+                <span id="sizeValue">5</span>
+            </div>
+            <button id="clearBtn" title="Limpiar pizarra (solo profesor)">
+                🧹 Limpiar todo
+            </button>
+        </div>
+        <button id="teacherBtn">
+            👨‍🏫 Tomar control (Ser Profesor)
+        </button>
+    </div>
+    <div class="status-bar">
+        <div class="status-indicator"></div>
+        <div id="status">
+            🟢 Conectando...
+        </div>
+    </div>
+    <div class="canvas-wrapper">
+        <canvas id="whiteboard"></canvas>
+    </div>
+    <div class="info-footer">
+        <div class="connection-badge">
+            <span>🔄 TIEMPO REAL</span>
+            <span class="live-badge">LIVE</span>
+        </div>
+        <div>
+            💡 <strong>Profesor:</strong> Activa modo profesor para escribir | <strong>Alumnos:</strong> Visualizan automáticamente
+        </div>
+        <div>
+            🔗 Comparte este enlace con tus alumnos
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mensaje de bienvenida en consola
+    console.log('%c🎓 PIZARRA ZOOM EN TIEMPO REAL 🎓', 'color: #3498db; font-size: 16px; font-weight: bold;');
+    console.log('Modo colaborativo activado. El primer usuario puede tomar control como profesor.');
+    console.log('Los alumnos verán los cambios instantáneamente.');
+</script>
+</body>
+</html>
