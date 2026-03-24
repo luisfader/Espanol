@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>El Tren Fantasma - Capítulos 1-4 | Novela interactiva para estudiantes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1e2a;
+            font-family: 'Segoe UI', 'Georgia', 'Times New Roman', serif;
+            color: #e6e9f0;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0f1219;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+        }
+
+        h1, h2, h3 {
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, #e9b56e, #c77d42);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+        }
+
+        .sub {
+            color: #9aa2bb;
+            border-left: 3px solid #c77d42;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        /* TABS NAVIGATION */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0 1.5rem;
+            border-bottom: 1px solid #2c2f3a;
+            padding-bottom: 0.75rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #b9c0da;
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            background: #c77d42;
+            color: #0f1219;
+            box-shadow: 0 4px 10px rgba(199,125,66,0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #2a2e3f;
+            color: #f0e6d2;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fade 0.25s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(5px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* capítulos cards */
+        .capitulo-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .cap-card {
+            background: #141824;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border-left: 5px solid #c77d42;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .cap-card h3 {
+            font-size: 1.8rem;
+            color: #e9b56e;
+            margin-bottom: 0.5rem;
+        }
+
+        .cap-text {
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        /* palabras con tooltip */
+        .word-tip {
+            border-bottom: 1px dashed #e9b56e;
+            cursor: help;
+            font-weight: 500;
+            color: #ffe1aa;
+            transition: 0.1s;
+        }
+        .word-tip:hover {
+            background-color: #2c2e42;
+            border-radius: 4px;
+        }
+
+        /* ejercicios */
+        .exercise-block {
+            background: #11141e;
+            border-radius: 1.2rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #2a2f3c;
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            color: #d6a15a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-item {
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #242838;
+        }
+
+        .truefalse {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 0.4rem;
+        }
+
+        .truefalse label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+        }
+
+        .reflexion-text {
+            width: 100%;
+            background: #0b0e16;
+            border: 1px solid #353b4a;
+            border-radius: 1rem;
+            padding: 0.7rem;
+            color: #eceef5;
+            margin-top: 0.5rem;
+            font-family: inherit;
+        }
+
+        button.verificar {
+            background: #c77d42;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            cursor: pointer;
+            color: #111;
+            transition: 0.2s;
+        }
+
+        button.verificar:hover {
+            background: #e09857;
+            transform: scale(0.97);
+        }
+
+        .feedback {
+            margin-top: 0.7rem;
+            font-size: 0.9rem;
+            background: #1e222f;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+
+        .dossier {
+            background: #0e111b;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .personaje {
+            background: #191e2c;
+            border-radius: 1.2rem;
+            padding: 1rem 1.5rem;
+            flex: 1 1 260px;
+            border-top: 4px solid #c77d42;
+        }
+
+        .personaje h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #e9b56e;
+        }
+
+        hr {
+            border-color: #2c3140;
+            margin: 1rem 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 0.8rem;
+            color: #6b728f;
+        }
+
+        @media (max-width: 700px) {
+            .container { padding: 1.2rem; }
+            .tab-btn { padding: 0.4rem 1rem; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚂 El Tren Fantasma</h1>
+    <div class="sub">Capítulos 1–4 · Novela de misterio con traducción al ruso (cursor sobre palabras clave)</div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="capitulos">📖 Capítulos 1-4</button>
+        <button class="tab-btn" data-tab="ejercicios">✍️ Ejercicios</button>
+        <button class="tab-btn" data-tab="dossier">📇 Dossier de personajes</button>
+    </div>
+
+    <!-- SECCIÓN CAPÍTULOS COMPLETOS -->
+    <div id="capitulos" class="tab-content active">
+        <div class="capitulo-grid">
+            <!-- CAPÍTULO 1 -->
+            <div class="cap-card">
+                <h3>📘 Capítulo 1: El tren fantasma</h3>
+                <div class="cap-text">
+                    <p><span class="word-tip" title="Меня зовут">Me llamo</span> Marcos. <span class="word-tip" title="Я имею / мне">Tengo</span> 35 años. <span class="word-tip" title="Я есть / являюсь">Soy</span> detective. <span class="word-tip" title="Я живу">Vivo</span> en Sinea. Sinea <span class="word-tip" title="есть">es</span> una ciudad bonita. <span class="word-tip" title="У меня есть (важное дело)">Tengo un caso importante</span>: El tren fantasma. El tren fantasma <span class="word-tip" title="появляется">aparece</span> por la noche y <span class="word-tip" title="увозит, забирает">se lleva</span> a la gente. No sé adónde va. <span class="word-tip" title="Я ищу">Busco</span> a mi novia que <span class="word-tip" title="находится, является пропавшей">está desaparecida</span> desde la semana pasada. Espero que esté bien.</p>
+                </div>
+            </div>
+            <!-- CAPÍTULO 2 -->
+            <div class="cap-card">
+                <h3>🚉 Capítulo 2: Misterio en la estación central</h3>
+                <div class="cap-text">
+                    <p>Marcos <span class="word-tip" title="идёт">va</span> a la estación central. En la estación <span class="word-tip" title="имеется / есть">hay</span> poca gente. Marcos <span class="word-tip" title="видит">ve</span> un hombre gordo y le <span class="word-tip" title="спрашивает">pregunta</span>: ¿<span class="word-tip" title="Знаете ли вы">Sabe usted</span> algo del tren fantasma? El hombre gordo contesta: Sí. El tren fantasma <span class="word-tip" title="забрал">se llevó</span> a mi <span class="word-tip" title="тёщу">suegra</span>. ¡Y <span class="word-tip" title="я доволен / рад">estoy contento</span> por eso! Marcos <span class="word-tip" title="понимает">comprende</span> que el tren fantasma es un caso muy <span class="word-tip" title="сложный">complicado</span>.</p>
+                </div>
+            </div>
+            <!-- CAPÍTULO 3 -->
+            <div class="cap-card">
+                <h3>🕵️ Capítulo 3: La conversación con el jefe de la estación</h3>
+                <div class="cap-text">
+                    <p>Marcos va a la oficina del jefe de la estación. El jefe es un hombre <span class="word-tip" title="высокий">alto</span> con un uniforme azul.<br>
+                    — <span class="word-tip" title="Доброй ночи">Buenas noches</span>. ¿Sabe usted algo del tren fantasma?<br>
+                    — Jefe: (mira alrededor y habla en voz baja) Sí... a veces aparece, a veces no.<br>
+                    — Marcos: ¿Dónde aparece el tren?<br>
+                    — Jefe: Por una pequeña suma de <span class="word-tip" title="деньги">dinero</span>... puedo <span class="word-tip" title="дать вам">darle</span> <span class="word-tip" title="информацию">información</span>.<br>
+                    A Marcos no le gusta pagar por información, pero quiere encontrar a su novia. Le da 200 rublos al jefe.<br>
+                    — Jefe: (sonríe) El tren aparece en el <span class="word-tip" title="район безумцев">barrio de los locos</span>. Los <span class="word-tip" title="воскресенья">domingos</span>, a las <span class="word-tip" title="2:15 de la madrugada">2:15 de la mañana</span>.<br>
+                    — Marcos: Hoy es sábado... son las <span class="word-tip" title="23:40 de la noche">23:40 de la noche</span>. Mañana puedo ir al barrio de los locos. ¡Quizás mi novia está ahí!<br>
+                    Marcos sale de la oficina. Está <span class="word-tip" title="нервный">nervioso</span> pero <span class="word-tip" title="полный надежды">esperanzado</span>.</p>
+                </div>
+            </div>
+            <!-- CAPÍTULO 4 -->
+            <div class="cap-card">
+                <h3>🌙 Capítulo 4: El tren aparece</h3>
+                <div class="cap-text">
+                    <p>Marcos llega al barrio de los locos. Las calles están <span class="word-tip" title="тёмные">oscuras</span> y las personas <span class="word-tip" title="говорят сами с собой">hablan solas</span>. Es un lugar muy <span class="word-tip" title="странный">extraño</span>.<br>
+                    Marcos ve a un hombre con ropa <span class="word-tip" title="грязная">sucia</span> y le pregunta:<br>
+                    — ¿<span class="word-tip" title="Вы видели">Ha visto</span> el tren fantasma?<br>
+                    — Hombre: (ríe) ¿El tren? Puede que sí... puede que no.<br>
+                    Otro hombre se acerca. Tiene los ojos muy abiertos.<br>
+                    — Hombre 2: ¡Yo lo veo siempre! ¡Todo el tiempo! ¡Incluso ahora!<br>
+                    Marcos está triste. Nadie aquí es normal. Nadie dice la verdad.<br>
+                    De repente... ¡un silbido fuerte! ¡Es el tren fantasma! Está delante de Marcos. Las <span class="word-tip" title="двери открываются">puertas se abren</span>...</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <p style="font-size:0.85rem; text-align:center;">✨ <strong>Nota:</strong> Pasa el cursor sobre las palabras subrayadas para ver su traducción al ruso.</p>
+    </div>
+
+    <!-- SECCIÓN EJERCICIOS: Preguntas, V/F y reflexión -->
+    <div id="ejercicios" class="tab-content">
+        <h2 style="margin-bottom: 1rem;">📝 Ejercicios (Capítulos 1–4)</h2>
+        
+        <!-- Bloque Verdadero o Falso (5 preguntas) -->
+        <div class="exercise-block">
+            <div class="exercise-title">✅ 1. Verdadero o Falso (V/F)</div>
+            <div id="vf-questions">
+                <div class="question-item">
+                    <p><strong>1.</strong> Marcos tiene 25 años.</p>
+                    <div class="truefalse">
+                        <label><input type="radio" name="vf1" value="F"> ❌ Falso</label>
+                        <label><input type="radio" name="vf1" value="V"> ✔️ Verdadero</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p><strong>2.</strong> En la estación central hay mucha gente.</p>
+                    <div class="truefalse">
+                        <label><input type="radio" name="vf2" value="F"> ❌ Falso</label>
+                        <label><input type="radio" name="vf2" value="V"> ✔️ Verdadero</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p><strong>3.</strong> El jefe de la estación dice que el tren aparece los domingos a las 2:15 de la mañana.</p>
+                    <div class="truefalse">
+                        <label><input type="radio" name="vf3" value="V"> ✔️ Verdadero</label>
+                        <label><input type="radio" name="vf3" value="F"> ❌ Falso</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p><strong>4.</strong> En el barrio de los locos, Marcos encuentra a su novia inmediatamente.</p>
+                    <div class="truefalse">
+                        <label><input type="radio" name="vf4" value="F"> ❌ Falso</label>
+                        <label><input type="radio" name="vf4" value="V"> ✔️ Verdadero</label>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <p><strong>5.</strong> El hombre gordo del capítulo 2 estaba contento porque el tren fantasma se llevó a su suegra.</p>
+                    <div class="truefalse">
+                        <label><input type="radio" name="vf5" value="V"> ✔️ Verdadero</label>
+                        <label><input type="radio" name="vf5" value="F"> ❌ Falso</label>
+                    </div>
+                </div>
+            </div>
+            <button class="verificar" id="checkVF">🔍 Verificar respuestas</button>
+            <div id="feedbackVF" class="feedback"></div>
+        </div>
+
+        <!-- Bloque preguntas de comprensión (respuesta corta) -->
+        <div class="exercise-block">
+            <div class="exercise-title">📌 2. Preguntas de comprensión</div>
+            <div class="question-item">
+                <p><strong>1.</strong> ¿Cómo se llama el detective y cuántos años tiene? (según capítulo 1)</p>
+                <textarea class="reflexion-text" id="q1" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+            </div>
+            <div class="question-item">
+                <p><strong>2.</strong> ¿Qué le pregunta Marcos al hombre gordo en la estación central?</p>
+                <textarea class="reflexion-text" id="q2" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+            </div>
+            <div class="question-item">
+                <p><strong>3.</strong> ¿Qué tiene que hacer Marcos para obtener información del jefe de la estación?</p>
+                <textarea class="reflexion-text" id="q3" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+            </div>
+            <div class="question-item">
+                <p><strong>4.</strong> Describe brevemente el ambiente del "barrio de los locos" (capítulo 4).</p>
+                <textarea class="reflexion-text" id="q4" rows="2" placeholder="Escribe tu respuesta..."></textarea>
+            </div>
+            <button class="verificar" id="checkQA">📖 Verificar respuestas sugeridas</button>
+            <div id="feedbackQA" class="feedback"></div>
+        </div>
+
+        <!-- Preguntas de reflexión personal -->
+        <div class="exercise-block">
+            <div class="exercise-title">💭 3. Preguntas de reflexión</div>
+            <div class="question-item">
+                <p><strong>1.</strong> ¿Por qué crees que el tren fantasma se lleva a la gente? ¿Qué simboliza en la historia?</p>
+                <textarea class="reflexion-text" id="reflex1" rows="3" placeholder="Tu reflexión..."></textarea>
+            </div>
+            <div class="question-item">
+                <p><strong>2.</strong> Si fueras Marcos, ¿irías al barrio de los locos a medianoche para buscar a tu novia? ¿Por qué?</p>
+                <textarea class="reflexion-text" id="reflex2" rows="3" placeholder="Tu reflexión..."></textarea>
+            </div>
+            <div class="question-item">
+                <p><strong>3.</strong> En el capítulo 3, el jefe pide dinero a cambio de información. ¿Crees que está bien? ¿Qué opinas?</p>
+                <textarea class="reflexion-text" id="reflex3" rows="3" placeholder="Opina libremente..."></textarea>
+            </div>
+            <button class="verificar" id="checkReflex">✨ Guardar / Revisar reflexiones</button>
+            <div id="feedbackReflex" class="feedback">📝 Tus respuestas se han registrado localmente (puedes seguir editándolas).</div>
+        </div>
+    </div>
+
+    <!-- DOSSIER DE PERSONAJES -->
+    <div id="dossier" class="tab-content">
+        <h2 style="margin-bottom: 1rem;">📋 Dossier de personajes importantes</h2>
+        <div class="dossier">
+            <div class="personaje">
+                <h4>🕵️ Marcos</h4>
+                <p><strong>Detective de 35 años</strong>, vive en Sinea. Busca a su novia desaparecida, Alicia. Valiente pero nervioso ante lo desconocido. Obstinado y con sentido de la justicia.</p>
+                <p><span class="word-tip" title="rasgos: persistente, valiente">Persistente · Leal</span></p>
+            </div>
+            <div class="personaje">
+                <h4>🌙 Alicia Gómez</h4>
+                <p><strong>Novia de Marcos</strong>, 31 años. Astróloga y tarotista profesional. Desapareció una semana antes del inicio. Cabello castaño rojizo, lunar en el cuello. Apasionada por misterios sobrenaturales.</p>
+                <p><span class="word-tip" title="vegetariana, colecciona libros de fantasmas">Esotérica · Vegetariana</span></p>
+            </div>
+            <div class="personaje">
+                <h4>🧑‍🦰 Hombre gordo (cap.2)</h4>
+                <p>Testigo en la estación central. Su suegra fue "llevada" por el tren fantasma y él está contento. Humor ácido.</p>
+                <p><span class="word-tip" title="yerno de la señora mayor">Yerno sarcástico</span></p>
+            </div>
+            <div class="personaje">
+                <h4>👮 Jefe de estación</h4>
+                <p>Hombre alto, uniforme azul, corrupto pero con información clave. Vende datos: el tren aparece los domingos a las 2:15 en el Barrio de los Locos.</p>
+            </div>
+            <div class="personaje">
+                <h4>👥 Habitantes del barrio de los locos</h4>
+                <p>Personas extrañas, hablan solas, ropa sucia. Dos hombres: uno responde evasivamente, otro asegura ver el tren "todo el tiempo". Simbolizan confusión y locura.</p>
+            </div>
+        </div>
+        <hr>
+        <p style="margin-top: 1rem; font-size:0.9rem;"><span class="word-tip" title="información adicional">📌 Nota:</span> El tren fantasma solo aparece para "pecadores" (según insinúa el inspector en capítulos posteriores). En los primeros 4 capítulos ya se presenta el misterio principal.</p>
+    </div>
+
+    <footer>© El Tren Fantasma · Material didáctico · Traducciones al ruso al pasar el cursor (tooltips)</footer>
+</div>
+
+<script>
+    // Función para cambiar tabs
+    const tabsBtns = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+    tabsBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabId = btn.getAttribute('data-tab');
+            contents.forEach(content => content.classList.remove('active'));
+            tabsBtns.forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        });
+    });
+
+    // Verdadero o Falso (respuestas esperadas)
+    const correctVF = {
+        vf1: 'F',  // Marcos tiene 35 años, no 25.
+        vf2: 'F',  // Hay poca gente, no mucha.
+        vf3: 'V',  // cierto: domingos 2:15
+        vf4: 'F',  // no encuentra a Alicia en cap4, solo llega el tren
+        vf5: 'V'   // contento porque se llevó a su suegra.
+    };
+
+    document.getElementById('checkVF').addEventListener('click', () => {
+        let results = [];
+        let allOk = true;
+        for (let i = 1; i <= 5; i++) {
+            const selected = document.querySelector(`input[name="vf${i}"]:checked`);
+            const userVal = selected ? selected.value : null;
+            const correctVal = correctVF[`vf${i}`];
+            if (userVal === correctVal) {
+                results.push(`✅ Pregunta ${i}: correcta`);
+            } else {
+                allOk = false;
+                results.push(`❌ Pregunta ${i}: incorrecta. Respuesta correcta era ${correctVal === 'V' ? 'Verdadero' : 'Falso'}.`);
+            }
+        }
+        document.getElementById('feedbackVF').innerHTML = results.join('<br>');
+    });
+
+    // Preguntas de comprensión: sugerencias dinámicas
+    const expectedAnswers = {
+        q1: "Marcos / Se llama Marcos y tiene 35 años.",
+        q2: "Le pregunta sobre el tren fantasma / ¿Sabe algo del tren fantasma?",
+        q3: "Pagar / Darle dinero (200 rublos) para obtener la información.",
+        q4: "Calles oscuras, personas que hablan solas, ambiente extraño, nadie es normal."
+    };
+
+    document.getElementById('checkQA').addEventListener('click', () => {
+        let user1 = document.getElementById('q1').value.trim();
+        let user2 = document.getElementById('q2').value.trim();
+        let user3 = document.getElementById('q3').value.trim();
+        let user4 = document.getElementById('q4').value.trim();
+        let feedback = "";
+        if (user1.length > 0) feedback += `📌 1. Respuesta sugerida: ${expectedAnswers.q1}<br>`;
+        else feedback += `⚠️ 1. No has respondido. Sugerencia: ${expectedAnswers.q1}<br>`;
+        if (user2.length > 0) feedback += `📌 2. Respuesta sugerida: ${expectedAnswers.q2}<br>`;
+        else feedback += `⚠️ 2. Sugerencia: ${expectedAnswers.q2}<br>`;
+        if (user3.length > 0) feedback += `📌 3. Respuesta sugerida: ${expectedAnswers.q3}<br>`;
+        else feedback += `⚠️ 3. Sugerencia: ${expectedAnswers.q3}<br>`;
+        if (user4.length > 0) feedback += `📌 4. Respuesta sugerida: ${expectedAnswers.q4}<br>`;
+        else feedback += `⚠️ 4. Sugerencia: ${expectedAnswers.q4}<br>`;
+        feedback += `<br>✨ Tus respuestas personales son válidas. Compara con las ideas clave.`;
+        document.getElementById('feedbackQA').innerHTML = feedback;
+    });
+
+    // Reflexiones: guardar en localStorage para no perder (opcional) y aviso amigable
+    document.getElementById('checkReflex').addEventListener('click', () => {
+        const reflex1 = document.getElementById('reflex1').value;
+        const reflex2 = document.getElementById('reflex2').value;
+        const reflex3 = document.getElementById('reflex3').value;
+        if (reflex1) localStorage.setItem('reflex_cap1_4', reflex1);
+        if (reflex2) localStorage.setItem('reflex_cap2_4', reflex2);
+        if (reflex3) localStorage.setItem('reflex_cap3_4', reflex3);
+        document.getElementById('feedbackReflex').innerHTML = '✅ Reflexiones guardadas (en tu navegador). ¡Sigue profundizando!';
+        setTimeout(() => {
+            document.getElementById('feedbackReflex').innerHTML = '📝 Tus respuestas se han registrado localmente (puedes seguir editándolas).';
+        }, 3000);
+    });
+
+    // Cargar reflexiones si existen previamente
+    if(localStorage.getItem('reflex_cap1_4')) document.getElementById('reflex1').value = localStorage.getItem('reflex_cap1_4');
+    if(localStorage.getItem('reflex_cap2_4')) document.getElementById('reflex2').value = localStorage.getItem('reflex_cap2_4');
+    if(localStorage.getItem('reflex_cap3_4')) document.getElementById('reflex3').value = localStorage.getItem('reflex_cap3_4');
+    
+    // Pequeña mejora: tooltips nativos, pero el CSS ya maneja .word-tip con title.
+    // Todo el contenido de capítulos tiene títulos en ruso mediante atributo title.
+</script>
+</body>
+</html>
