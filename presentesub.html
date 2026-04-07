@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Испанский A2: Presente de Subjuntivo · Поезд во Владивосток</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #1e2f3e;
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 1.8rem 2rem 2.5rem;
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            color: #1e466e;
+            border-left: 6px solid #d44c2f;
+            padding-left: 1rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .subtitulo {
+            color: #2c5a7a;
+            margin-bottom: 1.8rem;
+            font-size: 1rem;
+            border-bottom: 1px solid #ffcd94;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        h2 {
+            color: #2c5a7a;
+            margin-top: 1.8rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            border-bottom: 2px solid #ffcd94;
+            display: inline-block;
+            padding-right: 1rem;
+        }
+
+        /* Bloques de explicación en ruso */
+        .explicacion, .formacion {
+            background: #fef9e6;
+            padding: 1rem 1.8rem;
+            border-radius: 28px;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        .ru-text {
+            font-family: inherit;
+        }
+
+        .formacion table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff7e8;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .formacion th, .formacion td {
+            border: 1px solid #ffd58c;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .formacion th {
+            background: #ffdead;
+            font-weight: 700;
+        }
+
+        .terminacion {
+            font-family: monospace;
+            font-weight: bold;
+            background: #fff0d0;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 16px;
+        }
+
+        /* Diálogo */
+        .dialogo {
+            background: #e6f2fa;
+            border-radius: 32px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Contenedor de imagen real que se verá en GitHub */
+        .imagen-viaje {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .imagen-viaje img {
+            max-width: 100%;
+            border-radius: 28px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+            border: 2px solid #ffcd94;
+            background-color: #f9f3e0;
+        }
+
+        .mensaje {
+            background: white;
+            border-radius: 24px;
+            padding: 1rem 1.3rem;
+            margin: 1rem 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            transition: 0.1s;
+        }
+
+        .persona {
+            font-weight: 800;
+            color: #c4451c;
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        /* Estilo para las frases con subjuntivo: negrita y con tooltip */
+        .subjuntivo {
+            font-weight: bold;
+            background-color: #fff0b5;
+            padding: 0 6px;
+            border-radius: 16px;
+            cursor: help;
+            display: inline-block;
+            transition: 0.1s;
+            border-bottom: 2px dotted #b45f2b;
+        }
+
+        /* tooltip personalizado con atributo data-ru, para mejor experiencia táctil */
+        .subjuntivo[data-ru] {
+            position: relative;
+        }
+
+        /* Para escritorio: tooltip al pasar el ratón */
+        .subjuntivo:hover:after {
+            content: attr(data-ru);
+            position: absolute;
+            bottom: 130%;
+            left: 0;
+            background: #2c3e50;
+            color: #ffefcf;
+            font-weight: normal;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            pointer-events: none;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Para móvil / touch: al tocar se muestra (se activa con :active) */
+        .subjuntivo:active:after {
+            content: attr(data-ru);
+            position: absolute;
+            bottom: 130%;
+            left: 0;
+            background: #1e466e;
+            color: white;
+            font-weight: normal;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        /* Ejercicios */
+        .ejercicios {
+            background: #f9fafc;
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .pregunta {
+            background: white;
+            padding: 1rem 1.3rem;
+            margin: 1.5rem 0;
+            border-radius: 20px;
+            border-left: 5px solid #d44c2f;
+        }
+
+        button {
+            background: #2c5a7a;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 22px;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 12px;
+            margin-right: 12px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        button:hover {
+            background: #1e466e;
+            transform: scale(0.97);
+        }
+
+        .resultado {
+            margin-top: 12px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            background: #eef2f7;
+            display: inline-block;
+        }
+
+        .correcto {
+            background: #c8e6d9;
+            color: #1f543e;
+        }
+
+        .incorrecto {
+            background: #ffe0db;
+            color: #b13e2d;
+        }
+
+        .eleccion-item {
+            margin: 12px 0;
+            padding: 6px;
+            background: #fef4e8;
+            border-radius: 30px;
+            padding-left: 15px;
+        }
+
+        label {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            margin-right: 6px;
+        }
+
+        hr {
+            margin: 1.5rem 0;
+            border: 1px solid #ffe0b5;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6f8faa;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 650px) {
+            .contenedor {
+                padding: 1.2rem;
+            }
+            .subjuntivo:hover:after, .subjuntivo:active:after {
+                white-space: normal;
+                width: 180px;
+                bottom: 120%;
+                font-size: 0.75rem;
+            }
+        }
+        textarea {
+            width: 100%;
+            border-radius: 20px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+<div class="contenedor">
+    <h1>🇪🇸 Presente de Subjuntivo · Уровень A2</h1>
+    <div class="subtitulo">✨ Испанский язык для русских учеников · Железнодорожное путешествие</div>
+
+    <!-- EXPLICACIÓN EN RUSO -->
+    <div class="explicacion">
+        <h2>📘 Что такое Subjuntivo? (Сослагательное наклонение)</h2>
+        <p><strong>Испанское сослагательное наклонение (Presente de Subjuntivo)</strong> — это не время, а <strong>наклонение</strong>. Оно выражает <strong>желания, надежды, эмоции, сомнения, просьбы или гипотетические ситуации</strong>. В отличие от индикатива (факты), субхунтиво показывает <strong>нереальность или возможное действие</strong>.<br>
+        ➕ <strong>Пример индикатива (факт):</strong> <em>El tren llega a las 8.</em> (Поезд прибывает в 8 — реальность).<br>
+        ✨ <strong>Пример субхунтиво (желание):</strong> <em>Espero que el tren <strong>llegue</strong> puntual.</em> (Надеюсь, поезд прибудет вовремя — не факт, а надежда).<br>
+        🔹 На уровне A2 мы используем субхунтиво после глаголов и выражений: <strong>esperar que</strong> (надеяться, что), <strong>ojalá</strong> (о, если бы / хотелось бы), <strong>querer que</strong> (хотеть, чтобы), <strong>es importante que</strong> (важно, чтобы).</p>
+    </div>
+
+    <!-- FORMACIÓN EN RUSO -->
+    <div class="formacion">
+        <h2>🔧 Образование Presente de Subjuntivo (правильные глаголы)</h2>
+        <p>✅ Берём <strong>первое лицо единственного числа (yo)</strong> настоящего времени индикатива, отбрасываем окончание <strong>-o</strong> и добавляем <strong>противоположные окончания</strong> для -AR / -ER, -IR:</p>
+        <table>
+            <thead>
+                <tr><th>Глаголы на -AR</th><th>Глаголы на -ER / -IR</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>hablar</strong> (говорить) → yo habl<u>o</u> → habl<strong>e, es, e, emos, éis, en</strong><br>
+                <em>hable, hables, hable, hablemos, habléis, hablen</em> (чтобы я говорил, чтобы ты говорил...)</td>
+                <td><strong>comer</strong> (есть) → yo com<u>o</u> → com<strong>a, as, a, amos, áis, an</strong><br>
+                <em>coma, comas, coma, comamos, comáis, coman</em><br>
+                <strong>vivir</strong> (жить) → viv<strong>a, as, a, amos, áis, an</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        <p>📌 Важные глаголы: <strong>esperar</strong> → espere, esperes, espere, esperemos, esperéis, esperen.<br>
+        <strong>viajar</strong> → viaje, viajes, viaje, viajemos, viajéis, viajen.</p>
+        <p>⚠️ <strong>Ojalá</strong> всегда требует субхунтиво: <em>Ojalá <strong>lleguemos</strong> pronto.</em> (О если бы мы прибыли скоро).</p>
+        <p>🎯 <strong>Неправильные глаголы для A2:</strong> <em>tener → tenga, venir → venga, salir → salga, hacer → haga, poner → ponga, decir → diga.</em></p>
+    </div>
+
+    <!-- IMAGEN REAL: cuando subas la imagen a GitHub, pon el nombre correcto. Sugiero "viaje_vladivostok.jpg" -->
+    <h2>🚆 Диалог в поезде: Москва → Владивосток</h2>
+    <div class="dialogo">
+        <div class="imagen-viaje">
+            <!-- IMPORTANTE: Para que la imagen se vea en GitHub, coloca tu archivo .jpg en la misma carpeta 
+            y cambia el nombre aquí si es necesario. Por defecto: tren_vladivostok.jpg -->
+            <img src="tren_vladivostok.jpg" alt="Поезд направляется во Владивосток, пейзажи Сибири" onerror="this.onerror=null; this.src='https://via.placeholder.com/800x400?text=Tren+a+Vladivostok+-+Agrega+la+imagen+como+tren_vladivostok.jpg'; this.style.opacity='0.8'">
+            <p style="font-size:0.8rem; margin-top:6px;">🚞 Файл изображения: <strong>tren_vladivostok.jpg</strong> (поместите в ту же папку на GitHub)</p>
+        </div>
+        <!-- Mensajes del diálogo con subjuntivo en negrita y traducción al ruso en data-ru -->
+        <div class="mensaje">
+            <span class="persona">🧳 Ана:</span> <strong class="subjuntivo" data-ru="Я надеюсь, что это путешествие станет незабываемым">Espero que este viaje <strong>sea</strong> inolvidable.</strong> Llevo años soñando con Vladivostok.
+        </div>
+        <div class="mensaje">
+            <span class="persona">🎒 Михаил:</span> Sí, <strong class="subjuntivo" data-ru="Я надеюсь, что мы увидим настоящую тайгу">espero que <strong>veamos</strong> la taiga auténtica</strong> y los paisajes de nieve. <strong class="subjuntivo" data-ru="О, если бы мы встретили дружелюбных людей">Ojalá <strong>encontremos</strong> gente muy amable</strong> en los pueblos.
+        </div>
+        <div class="mensaje">
+            <span class="persona">🧳 Ана:</span> <strong class="subjuntivo" data-ru="Надеюсь, что еда в поезде будет вкусной">Espero que la comida del tren <strong>sea</strong> sabrosa</strong>... y <strong class="subjuntivo" data-ru="О, если бы погода была ясной">ojalá el clima <strong>sea</strong> soleado</strong> cuando lleguemos al final.
+        </div>
+        <div class="mensaje">
+            <span class="persona">🎒 Михаил:</span> También <strong class="subjuntivo" data-ru="Надеюсь, что мы сделаем много фото">espero que <strong>hagamos</strong> muchas fotos</strong> en el lago Baikal. <strong class="subjuntivo" data-ru="О, если бы мы могли увидеть нерп">Ojalá <strong>podamos</strong> ver las focas nerpa</strong>.
+        </div>
+        <div class="mensaje">
+            <span class="persona">🧳 Ана:</span> <strong class="subjuntivo" data-ru="Надеюсь, что у нас будет время погулять по Владивостоку">Espero que <strong>tengamos</strong> tiempo para pasear por Vladivostok</strong> y subir al puente. <strong class="subjuntivo" data-ru="О, если бы мы попробовали свежие морепродукты">Ojalá <strong>probemos</strong> marisco fresco</strong>.
+        </div>
+        <div class="mensaje">
+            <span class="persona">🎒 Михаил:</span> Totalmente. <strong class="subjuntivo" data-ru="Надеюсь, что поездка нас удивит">Espero que el viaje nos <strong>sorprenda</strong> a cada instante</strong>. ¡A Vladivostok con ilusión!
+        </div>
+        <div class="mensaje" style="background:#fffaec;">
+            <span class="persona">🧳 Ана:</span> Y ahora... <strong class="subjuntivo" data-ru="О, если бы мы не опоздали">¡ojalá no <strong>lleguemos</strong> tarde</strong>! El tren empieza a moverse. ¡Qué emoción!
+        </div>
+        <p style="font-size:0.85rem; margin-top:12px; text-align:center;">✨ <strong>Наведите курсор или коснитесь пальцем</strong> фразы в <strong>жирном шрифте</strong>, чтобы увидеть перевод на русский.</p>
+    </div>
+
+    <!-- EJERCICIOS -->
+    <div class="ejercicios">
+        <h2>📝 Упражнения</h2>
+        
+        <!-- 1. Verdadero o falso -->
+        <div class="pregunta">
+            <h3>🔍 1. Verdadero (V) или Falso (F) (по диалогу)</h3>
+            <div id="vfQuestions">
+                <div class="eleccion-item">1. Ана надеется, что еда в поезде будет вкусной. (Ana espera que la comida del tren sea sabrosa)
+                    <br><label><input type="radio" name="vf1" value="true"> Verdadero</label>
+                    <label><input type="radio" name="vf1" value="false"> Falso</label>
+                </div>
+                <div class="eleccion-item">2. Михаил говорит: «Ojalá encuentren gente amable» (он использует «encuentren», а не «encontremos»).
+                    <br><label><input type="radio" name="vf2" value="false"> Verdadero</label>
+                    <label><input type="radio" name="vf2" value="true"> Falso</label>
+                </div>
+                <div class="eleccion-item">3. Ана и Михаил надеются увидеть нерп (байкальских тюленей) на озере Байкал.
+                    <br><label><input type="radio" name="vf3" value="true"> Verdadero</label>
+                    <label><input type="radio" name="vf3" value="false"> Falso</label>
+                </div>
+                <div class="eleccion-item">4. Михаил говорит: «Espero que el viaje sorprenda».
+                    <br><label><input type="radio" name="vf4" value="true"> Verdadero</label>
+                    <label><input type="radio" name="vf4" value="false"> Falso</label>
+                </div>
+            </div>
+            <button id="btnVF">✅ Проверить ответы</button>
+            <div id="resultadoVF" class="resultado"></div>
+        </div>
+
+        <!-- 2. Вопросы по тексту -->
+        <div class="pregunta">
+            <h3>🗣️ 2. Ответьте на вопросы по диалогу</h3>
+            <ol>
+                <li>Чего ожидает Ана относительно поездки? (используйте «esperar que»)</li>
+                <li>Что Михаил хочет с помощью «Ojalá» по поводу погоды?</li>
+                <li>Что они хотят сделать во Владивостоке согласно тексту?</li>
+            </ol>
+            <textarea id="respuestasAbiertas" rows="4" placeholder="Напишите свои ответы по-испански..."></textarea>
+            <button id="btnMostrarFeed">💬 Проверить себя (примеры ответов)</button>
+            <div id="feedbackAbierto" class="resultado"></div>
+        </div>
+
+        <!-- 3. Личный вопрос: qué esperas de tu próximo viaje -->
+        <div class="pregunta">
+            <h3>✈️ 3. ¿Qué esperas tú de tu próximo viaje? (Что ты ждешь от своей следующей поездки?)</h3>
+            <p>Используй <strong>esperar que</strong> + subjuntivo или <strong>ojalá</strong>.</p>
+            <textarea id="viajePersonal" rows="3" placeholder="Ejemplo: Espero que mi próximo viaje sea divertido. Ojalá visite lugares nuevos..."></textarea>
+            <button id="btnPersonal">🌟 Показать обратную связь</button>
+            <div id="feedbackPersonal" class="resultado"></div>
+        </div>
+
+        <!-- 4. Выбери правильную форму (subjuntivo / indicativo) -->
+        <div class="pregunta">
+            <h3>📌 4. Выберите правильную форму (Presente de Subjuntivo / Indicativo)</h3>
+            <div id="eligeFormas">
+                <div class="eleccion-item">a) Espero que el tren ______ puntual. 
+                    <label><input type="radio" name="ex1" value="llega"> llega (indicativo)</label>
+                    <label><input type="radio" name="ex1" value="llegue"> <strong>llegue</strong> (subjuntivo)</label>
+                </div>
+                <div class="eleccion-item">b) Ojalá nosotros ______ muchos amigos rusos.
+                    <label><input type="radio" name="ex2" value="hacemos"> hacemos</label>
+                    <label><input type="radio" name="ex2" value="hagamos"> <strong>hagamos</strong></label>
+                </div>
+                <div class="eleccion-item">c) Ana dice: "El tren sale a las 8" → это факт: El tren ______ a las 8.
+                    <label><input type="radio" name="ex3" value="salga"> salga (subj)</label>
+                    <label><input type="radio" name="ex3" value="sale"> <strong>sale</strong> (indicativo)</label>
+                </div>
+                <div class="eleccion-item">d) Mis padres esperan que yo ______ bien en el viaje.
+                    <label><input type="radio" name="ex4" value="descanso"> descanso</label>
+                    <label><input type="radio" name="ex4" value="descanse"> <strong>descanse</strong></label>
+                </div>
+            </div>
+            <button id="btnElige">🔎 Проверить</button>
+            <div id="resultadoElige" class="resultado"></div>
+        </div>
+    </div>
+    <footer>
+        🌟 Запомни: subjuntivo используется с желаниями, esperar que, ojalá. ¡Sigue practicando!
+    </footer>
+</div>
+
+<script>
+    function mostrarResultado(elementId, mensaje, esCorrecto = true) {
+        let div = document.getElementById(elementId);
+        div.innerHTML = mensaje;
+        div.classList.remove('correcto', 'incorrecto');
+        if (esCorrecto) div.classList.add('correcto');
+        else div.classList.add('incorrecto');
+    }
+
+    // EJ 1 Verdadero o falso
+    const vfCorrectas = {
+        vf1: true,   // Ana espera que la comida sea sabrosa -> verdadero
+        vf2: false,  // Mijaíl dice "encuentren"? No, dijo "encontremos" -> falso
+        vf3: true,   // Quieren ver nerpa (focas) -> verdadero
+        vf4: true    // Mijaíl dice "espero que el viaje sorprenda" -> verdadero
+    };
+    document.getElementById('btnVF').addEventListener('click', function() {
+        let respuestas = {
+            vf1: document.querySelector('input[name="vf1"]:checked'),
+            vf2: document.querySelector('input[name="vf2"]:checked'),
+            vf3: document.querySelector('input[name="vf3"]:checked'),
+            vf4: document.querySelector('input[name="vf4"]:checked')
+        };
+        let aciertos = 0;
+        let total = 4;
+        for (let key in vfCorrectas) {
+            if (respuestas[key] && respuestas[key].value === String(vfCorrectas[key])) {
+                aciertos++;
+            }
+        }
+        let msg = `✅ Правильно: ${aciertos} из ${total}. `;
+        if (aciertos === total) msg += "¡Perfecto! Отлично поняли диалог.";
+        else msg += "Перечитайте диалог, обратите внимание на фразы в жирном шрифте.";
+        mostrarResultado('resultadoVF', msg, aciertos >= 2);
+    });
+
+    // EJ 2: автопроверка открытых вопросов
+    document.getElementById('btnMostrarFeed').addEventListener('click', function() {
+        let texto = document.getElementById('respuestasAbiertas').value.trim();
+        let modelo = "<br><strong>📖 Примерные ответы:</strong><br>1. Ana espera que el viaje sea inolvidable / que la comida sea sabrosa.<br>2. Mijaíl desea: Ojalá el clima sea soleado.<br>3. Quieren pasear por Vladivostok, subir al puente y probar marisco fresco.";
+        if (texto === "") {
+            mostrarResultado('feedbackAbierto', "✏️ Напишите свои ответы. " + modelo, false);
+            return;
+        }
+        mostrarResultado('feedbackAbierto', "👍 ¡Bien! Сравните с модельными ответами." + modelo, true);
+    });
+
+    // EJ 3: вопрос о личном путешествии
+    document.getElementById('btnPersonal').addEventListener('click', function() {
+        let respuesta = document.getElementById('viajePersonal').value.trim();
+        if (respuesta === "") {
+            mostrarResultado('feedbackPersonal', "✏️ Напишите предложение с 'Espero que...' или 'Ojalá...' + subjuntivo. Ejemplo: Espero que mi próximo viaje a Rusia sea increíble.", false);
+            return;
+        }
+        let tieneSubj = /\b(sea|tenga|vaya|haga|pueda|conozca|visite|viaje|disfrute|coma|duerma|salga|venga|esté|encuentre|vea|hagamos|llegue|sorprenda|probemos|podamos|descanse|baile|coma|viva)\b/i.test(respuesta);
+        let tieneEspero = /espero que/i.test(respuesta);
+        let tieneOjala = /ojalá/i.test(respuesta);
+        if ((tieneEspero || tieneOjala) && tieneSubj) {
+            mostrarResultado('feedbackPersonal', "🎉 ¡Excelente! Вы правильно использовали сослагательное наклонение для выражения желаний.", true);
+        } else {
+            mostrarResultado('feedbackPersonal', "⚠️ Внимание: после 'espero que' или 'ojalá' нужен Presente de Subjuntivo. Пример: 'Espero que mi viaje sea genial'. Попробуйте еще раз.", false);
+        }
+    });
+
+    // EJ 4: выбор правильной формы
+    document.getElementById('btnElige').addEventListener('click', function() {
+        let correctas = {
+            ex1: 'llegue',
+            ex2: 'hagamos',
+            ex3: 'sale',
+            ex4: 'descanse'
+        };
+        let respuestasE = {
+            ex1: document.querySelector('input[name="ex1"]:checked'),
+            ex2: document.querySelector('input[name="ex2"]:checked'),
+            ex3: document.querySelector('input[name="ex3"]:checked'),
+            ex4: document.querySelector('input[name="ex4"]:checked')
+        };
+        let aciertosE = 0;
+        let totalE = 4;
+        for (let key in correctas) {
+            if (respuestasE[key] && respuestasE[key].value === correctas[key]) {
+                aciertosE++;
+            }
+        }
+        let mensajeE = `Результат: ${aciertosE}/${totalE} правильных. `;
+        if (aciertosE === totalE) mensajeE += "¡Magnífico! Отлично различаете индикатив и субхунтиво.";
+        else if (aciertosE >= 2) mensajeE += "Хорошая работа, повторите правила желаний.";
+        else mensajeE += "Повторите теорию: 'esperar que' и 'ojalá' всегда требуют субхунтиво. Факты — индикатив.";
+        mostrarResultado('resultadoElige', mensajeE, aciertosE >= 2);
+        if (aciertosE < 2) {
+            document.getElementById('resultadoElige').innerHTML += "<br>🔹 Подсказка: a) желание → llegue, b) ojalá + субхунтиво (hagamos), c) факт → sale, d) esperar que + descanse.";
+        }
+    });
+</script>
+</body>
+</html>
