@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clase de español: Cuando era pequeño</title>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --card: #ffffff;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --accent: #8b5cf6;
+      --accent-2: #ede9fe;
+      --ok: #166534;
+      --bad: #991b1b;
+      --border: #e5e7eb;
+    }* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #faf7f2 0%, #f3efe7 100%);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 18px 60px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: white;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  margin-bottom: 22px;
+}
+
+h1, h2, h3 { margin-top: 0; }
+h1 { font-size: 2rem; margin-bottom: 8px; }
+h2 { font-size: 1.35rem; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.05);
+}
+
+.example {
+  background: var(--accent-2);
+  border-left: 5px solid var(--accent);
+  padding: 12px 14px;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+.muted { color: var(--muted); }
+
+.exercise {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  background: #fcfcfd;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary {
+  background: var(--accent);
+  color: white;
+}
+
+.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.result {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  min-height: 1.2em;
+}
+
+.correct { color: var(--ok); }
+.incorrect { color: var(--bad); }
+
+.score {
+  font-size: 1.15rem;
+  font-weight: bold;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f3f4f6;
+}
+
+ul { padding-left: 20px; }
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  margin-top: 30px;
+  font-size: 0.95rem;
+}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Clase de español: Cuando era pequeño</h1>
+      <p>Práctica del <strong>pretérito imperfecto</strong> con 10 ejercicios interactivos.</p>
+    </section><section class="card">
+  <h2>1. Recordatorio</h2>
+  <p>Usamos el <strong>imperfecto</strong> para hablar de hábitos, descripciones y acciones repetidas en el pasado.</p>
+  <div class="example">
+    <p><strong>Ejemplos:</strong></p>
+    <ul>
+      <li>Cuando era pequeño, <strong>jugaba</strong> en el parque todos los días.</li>
+      <li>Mi abuela <strong>vivía</strong> en un pueblo muy tranquilo.</li>
+      <li>De niño, yo <strong>tenía</strong> un perro blanco.</li>
+    </ul>
+  </div>
+  <p class="muted">Recuerda: -ar → <strong>-aba</strong>, -er/-ir → <strong>-ía</strong></p>
+</section>
+
+<section class="card">
+  <h2>2. Ejercicios</h2>
+  <p>Completa las oraciones con la forma correcta del imperfecto.</p>
+
+  <div id="exercises"></div>
+
+  <div class="actions">
+    <button class="primary" onclick="corregir()">Corregir</button>
+    <button class="secondary" onclick="mostrarRespuestas()">Mostrar respuestas</button>
+    <button class="secondary" onclick="reiniciar()">Reiniciar</button>
+  </div>
+
+  <div id="score" class="score" style="display:none;"></div>
+</section>
+
+<footer>
+  Actividad HTML para practicar el imperfecto.
+</footer>
