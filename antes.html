@@ -1,179 +1,692 @@
-<!DOCTYPE html><html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clase de español: Cuando era pequeño</title>
+  <title>Clase de español: La vida antes y ahora</title>
   <style>
     :root {
-      --bg: #f7f4ef;
-      --card: #ffffff;
-      --ink: #1f2937;
-      --muted: #6b7280;
+      --bg-1: #fff8f3;
+      --bg-2: #f7ecff;
+      --card: rgba(255,255,255,0.82);
+      --card-strong: rgba(255,255,255,0.94);
+      --ink: #2b2233;
+      --muted: #6d6277;
       --accent: #8b5cf6;
-      --accent-2: #ede9fe;
+      --accent-2: #ecdcff;
+      --accent-3: #ffd9e8;
+      --accent-4: #fff1c7;
       --ok: #166534;
       --bad: #991b1b;
-      --border: #e5e7eb;
-    }* { box-sizing: border-box; }
+      --border: rgba(139,92,246,0.16);
+      --shadow: 0 18px 40px rgba(91, 55, 144, 0.16);
+      --radius: 22px;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: linear-gradient(180deg, #faf7f2 0%, #f3efe7 100%);
-  color: var(--ink);
-  line-height: 1.5;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-.wrap {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 28px 18px 60px;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.hero {
-  background: linear-gradient(135deg, #7c3aed, #a78bfa);
-  color: white;
-  padding: 28px;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.12);
-  margin-bottom: 22px;
-}
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 217, 232, 0.9), transparent 32%),
+        radial-gradient(circle at top right, rgba(236, 220, 255, 0.95), transparent 30%),
+        linear-gradient(180deg, var(--bg-1) 0%, #faf3ff 45%, var(--bg-2) 100%);
+      line-height: 1.7;
+    }
 
-h1, h2, h3 { margin-top: 0; }
-h1 { font-size: 2rem; margin-bottom: 8px; }
-h2 { font-size: 1.35rem; }
+    .decor {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,.05);
-}
+    .blur {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+    }
 
-.example {
-  background: var(--accent-2);
-  border-left: 5px solid var(--accent);
-  padding: 12px 14px;
-  border-radius: 10px;
-  margin: 12px 0;
-}
+    .blur.one {
+      width: 240px;
+      height: 240px;
+      background: #f7b7d2;
+      top: 80px;
+      left: -40px;
+    }
 
-.muted { color: var(--muted); }
+    .blur.two {
+      width: 280px;
+      height: 280px;
+      background: #cab5ff;
+      top: 220px;
+      right: -70px;
+    }
 
-.exercise {
-  padding: 16px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  margin-bottom: 14px;
-  background: #fcfcfd;
-}
+    .blur.three {
+      width: 220px;
+      height: 220px;
+      background: #ffe7a8;
+      bottom: 50px;
+      left: 12%;
+    }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 18px 70px;
+    }
 
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 1rem;
-}
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(124,58,237,0.95), rgba(168,85,247,0.92) 55%, rgba(244,114,182,0.88));
+      color: #fff;
+      padding: 34px 30px;
+      border-radius: 30px;
+      box-shadow: 0 22px 50px rgba(109, 40, 217, 0.22);
+      margin-bottom: 24px;
+    }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 22px;
-}
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
 
-button {
-  border: none;
-  border-radius: 12px;
-  padding: 12px 18px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: bold;
-}
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -80px;
+      right: -50px;
+    }
 
-.primary {
-  background: var(--accent);
-  color: white;
-}
+    .hero::after {
+      width: 160px;
+      height: 160px;
+      bottom: -60px;
+      left: -30px;
+    }
 
-.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
+    .eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      backdrop-filter: blur(6px);
+    }
 
-.result {
-  margin-top: 8px;
-  font-size: 0.95rem;
-  font-weight: bold;
-  min-height: 1.2em;
-}
+    h1, h2, h3 {
+      margin-top: 0;
+      line-height: 1.2;
+    }
 
-.correct { color: var(--ok); }
-.incorrect { color: var(--bad); }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 12px;
+    }
 
-.score {
-  font-size: 1.15rem;
-  font-weight: bold;
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 12px;
-  background: #f3f4f6;
-}
+    h2 {
+      font-size: 1.55rem;
+      margin-bottom: 14px;
+      color: #4b2d73;
+    }
 
-ul { padding-left: 20px; }
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #5d3e84;
+    }
 
-footer {
-  text-align: center;
-  color: var(--muted);
-  margin-top: 30px;
-  font-size: 0.95rem;
-}
+    .hero p {
+      max-width: 760px;
+      margin: 0;
+      font-size: 1.04rem;
+      color: rgba(255,255,255,0.95);
+    }
 
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.65);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .card.strong {
+      background: var(--card-strong);
+    }
+
+    .intro-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .intro-item {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,240,255,0.92));
+      border: 1px solid var(--border);
+    }
+
+    .example {
+      background: linear-gradient(135deg, rgba(236,220,255,0.9), rgba(255,255,255,0.95));
+      border-left: 6px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin: 16px 0 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .story-box {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,250,253,0.9));
+    }
+
+    .story-box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(255, 217, 232, 0.28), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(236, 220, 255, 0.35), transparent 30%);
+      pointer-events: none;
+    }
+
+    .story-box > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .story-meta {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent-2), #fff);
+      color: #5a3690;
+      font-weight: 700;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+    }
+
+    .story-text p {
+      margin: 0 0 18px;
+      text-align: justify;
+      font-size: 1.02rem;
+    }
+
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .exercise {
+      padding: 18px;
+      border: 1px solid rgba(139,92,246,0.12);
+      border-radius: 18px;
+      margin-bottom: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(251,247,255,0.95));
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .exercise:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(100, 72, 142, 0.08);
+    }
+
+    .exercise-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #c084fc);
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 10px;
+      box-shadow: 0 8px 16px rgba(139,92,246,0.22);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      color: #37234d;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #d8c7f4;
+      border-radius: 14px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s ease;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.12);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #8b5cf6, #a855f7);
+      color: white;
+      box-shadow: 0 14px 26px rgba(139,92,246,0.22);
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, #fff4d6, #ffe8ef);
+      color: #4a355f;
+      border: 1px solid rgba(175, 131, 217, 0.18);
+    }
+
+    .result {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 1.3em;
+    }
+
+    .correct {
+      color: var(--ok);
+    }
+
+    .incorrect {
+      color: var(--bad);
+    }
+
+    .score {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #f8f4ff, #fff7e6);
+      border: 1px solid rgba(139,92,246,0.14);
+      color: #4b2d73;
+    }
+
+    .tips {
+      display: grid;
+      gap: 12px;
+    }
+
+    .tip {
+      padding: 14px 15px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(255,255,255,0.94), rgba(255,247,235,0.95));
+    }
+
+    .legend {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .legend div {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(139,92,246,0.1);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 32px;
+      font-size: 0.96rem;
+      padding-bottom: 10px;
+    }
+
+    @media (max-width: 860px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px 22px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .wrap {
+        padding: 20px 14px 50px;
+      }
+
+      h1 {
+        font-size: 1.85rem;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="decor">
+    <div class="blur one"></div>
+    <div class="blur two"></div>
+    <div class="blur three"></div>
+  </div>
+
   <div class="wrap">
     <section class="hero">
-      <h1>Clase de español: Cuando era pequeño</h1>
-      <p>Práctica del <strong>pretérito imperfecto</strong> con 10 ejercicios interactivos.</p>
-    </section><section class="card">
-  <h2>1. Recordatorio</h2>
-  <p>Usamos el <strong>imperfecto</strong> para hablar de hábitos, descripciones y acciones repetidas en el pasado.</p>
-  <div class="example">
-    <p><strong>Ejemplos:</strong></p>
-    <ul>
-      <li>Cuando era pequeño, <strong>jugaba</strong> en el parque todos los días.</li>
-      <li>Mi abuela <strong>vivía</strong> en un pueblo muy tranquilo.</li>
-      <li>De niño, yo <strong>tenía</strong> un perro blanco.</li>
-    </ul>
+      <div class="eyebrow">Lectura + gramática + práctica interactiva</div>
+      <h1>La vida antes y ahora</h1>
+      <p>
+        Actividad completa para practicar el <strong>pretérito imperfecto</strong> con un texto largo,
+        elegante y emocional sobre una mujer que recuerda cómo era su vida antes y cómo ha cambiado con el tiempo.
+      </p>
+    </section>
+
+    <section class="grid">
+      <div class="card strong">
+        <h2>¿Cuándo usamos el imperfecto?</h2>
+        <p>
+          Usamos el <strong>pretérito imperfecto</strong> para hablar de costumbres, descripciones,
+          situaciones habituales y procesos en el pasado.
+        </p>
+
+        <div class="intro-list">
+          <div class="intro-item"><strong>Hábitos:</strong> Antes salía temprano todos los días.</div>
+          <div class="intro-item"><strong>Descripciones:</strong> La casa era grande y silenciosa.</div>
+          <div class="intro-item"><strong>Emociones o contexto:</strong> Ella se sentía tranquila.</div>
+        </div>
+
+        <div class="example">
+          <strong>Formación:</strong><br />
+          Verbos en <strong>-ar</strong> → <strong>-aba</strong><br />
+          Verbos en <strong>-er / -ir</strong> → <strong>-ía</strong>
+        </div>
+      </div>
+
+      <div class="card strong">
+        <h2>Objetivo de la clase</h2>
+        <div class="tips">
+          <div class="tip">
+            Leer un texto de <strong>6 párrafos</strong> con vocabulario cotidiano y reflexivo.
+          </div>
+          <div class="tip">
+            Comprender cómo se expresa el contraste entre <strong>antes</strong> y <strong>ahora</strong>.
+          </div>
+          <div class="tip">
+            Resolver <strong>10 ejercicios interactivos</strong> basados en el texto.
+          </div>
+        </div>
+
+        <div class="legend">
+          <div><strong>Idea central:</strong> la memoria transforma la forma en que vemos nuestra vida.</div>
+          <div><strong>Tema:</strong> cambios personales, rutina, tiempo, emociones y madurez.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card story-box">
+      <div class="story-meta">Texto de lectura</div>
+      <h2>Cuando miraba atrás</h2>
+
+      <div class="story-text">
+        <p>
+          Clara se sentaba muchas veces junto a la ventana al final de la tarde y dejaba que la luz suave del cielo
+          entrara en la sala. En esos momentos pensaba en cómo era su vida años atrás, cuando todo parecía más lento
+          y más simple. Antes vivía sin mirar tanto el reloj, caminaba por las calles de su barrio sin prisa y conocía
+          el nombre de casi todos sus vecinos. El tiempo no la perseguía y cada día tenía una forma tranquila y familiar.
+        </p>
+
+        <p>
+          Cuando era joven, su casa siempre estaba llena de voces, de música y de pequeños ruidos cotidianos.
+          Su madre preparaba la cena mientras su padre leía el periódico, y ella pasaba horas hablando con su hermana
+          en la cocina. Los domingos olían a pan recién hecho y a café caliente, y las tardes parecían interminables.
+          En aquella época Clara creía que esas escenas iban a durar para siempre y que la vida no iba a cambiar demasiado.
+        </p>
+
+        <p>
+          También recordaba que antes soñaba de otra manera. Imaginaba viajes largos, ciudades lejanas y una vida llena
+          de sorpresas luminosas. Se enamoraba fácilmente de las posibilidades, escribía planes en cuadernos pequeños
+          y pensaba que el futuro la esperaba con los brazos abiertos. Todo parecía cercano y lejano al mismo tiempo,
+          como si el mundo fuera enorme pero, a la vez, estuviera hecho exactamente para ella.
+        </p>
+
+        <p>
+          Ahora su vida era distinta. Vivía en un apartamento moderno, trabajaba muchas horas y tenía responsabilidades
+          que antes ni siquiera comprendía. Ya no hablaba con tanta frecuencia con algunas personas que habían sido
+          esenciales en su pasado, y muchas costumbres se habían ido apagando sin hacer ruido. A veces sentía que había
+          ganado experiencia y fortaleza, pero también pensaba que había perdido cierta capacidad de asombro.
+        </p>
+
+        <p>
+          Sin embargo, Clara no miraba el pasado con pura tristeza. Comprendía que antes idealizaba muchas cosas y que
+          no todo era tan perfecto como parecía en sus recuerdos. En aquellos años también tenía miedo, dudaba de sí misma
+          y muchas noches no sabía qué camino debía seguir. Lo que ocurría era que el tiempo suavizaba las heridas
+          y convertía algunos momentos comunes en imágenes casi doradas.
+        </p>
+
+        <p>
+          Mientras observaba la ciudad desde la ventana, Clara entendía que ella también había cambiado por dentro.
+          Antes buscaba respuestas inmediatas y necesitaba sentir que todo estaba bajo control; ahora aceptaba mejor
+          la incertidumbre y escuchaba más su propia voz. Ya no era la misma mujer que soñaba sin pausa en la cocina de
+          su infancia, pero tampoco había perdido del todo aquella sensibilidad. Seguía llevando dentro a esa joven que
+          miraba el futuro con esperanza, solo que ahora la acompañaba una versión más serena, más consciente y más fuerte.
+        </p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Ejercicios interactivos</h2>
+      <p class="muted">
+        Completa cada oración con la forma correcta del <strong>imperfecto</strong>.
+        Escribe solo una palabra o forma verbal.
+      </p>
+
+      <div id="exercises"></div>
+
+      <div class="actions">
+        <button class="primary" onclick="corregir()">Corregir</button>
+        <button class="secondary" onclick="mostrarRespuestas()">Mostrar respuestas</button>
+        <button class="secondary" onclick="reiniciar()">Reiniciar</button>
+      </div>
+
+      <div id="score" class="score" style="display:none;"></div>
+    </section>
+
+    <footer>
+      Actividad HTML lista para usar en clase de español.
+    </footer>
   </div>
-  <p class="muted">Recuerda: -ar → <strong>-aba</strong>, -er/-ir → <strong>-ía</strong></p>
-</section>
 
-<section class="card">
-  <h2>2. Ejercicios</h2>
-  <p>Completa las oraciones con la forma correcta del imperfecto.</p>
+  <script>
+    const ejercicios = [
+      {
+        pregunta: "1. Clara muchas veces se ______ junto a la ventana al final de la tarde.",
+        respuesta: "sentaba"
+      },
+      {
+        pregunta: "2. Antes ella no ______ tanto el reloj.",
+        respuesta: "miraba"
+      },
+      {
+        pregunta: "3. Su madre ______ la cena mientras su padre leía el periódico.",
+        respuesta: "preparaba"
+      },
+      {
+        pregunta: "4. Los domingos ______ a pan recién hecho y a café caliente.",
+        respuesta: "olían"
+      },
+      {
+        pregunta: "5. Clara ______ que esas escenas iban a durar para siempre.",
+        respuesta: "creía"
+      },
+      {
+        pregunta: "6. Cuando era joven, ella ______ planes en cuadernos pequeños.",
+        respuesta: "escribía"
+      },
+      {
+        pregunta: "7. Antes Clara se ______ fácilmente de las posibilidades.",
+        respuesta: "enamoraba"
+      },
+      {
+        pregunta: "8. Ahora su vida ______ distinta y más exigente.",
+        respuesta: "era"
+      },
+      {
+        pregunta: "9. En aquellos años también ______ miedo y dudaba de sí misma.",
+        respuesta: "tenía"
+      },
+      {
+        pregunta: "10. Antes ella ______ respuestas inmediatas a todo.",
+        respuesta: "buscaba"
+      }
+    ];
 
-  <div id="exercises"></div>
+    const exercisesContainer = document.getElementById("exercises");
 
-  <div class="actions">
-    <button class="primary" onclick="corregir()">Corregir</button>
-    <button class="secondary" onclick="mostrarRespuestas()">Mostrar respuestas</button>
-    <button class="secondary" onclick="reiniciar()">Reiniciar</button>
-  </div>
+    function crearEjercicios() {
+      exercisesContainer.innerHTML = "";
 
-  <div id="score" class="score" style="display:none;"></div>
-</section>
+      ejercicios.forEach((ej, i) => {
+        const div = document.createElement("div");
+        div.className = "exercise";
+        div.innerHTML = `
+          <div class="exercise-number">${i + 1}</div>
+          <label for="q${i}">${ej.pregunta}</label>
+          <input type="text" id="q${i}" autocomplete="off" />
+          <div id="r${i}" class="result"></div>
+        `;
+        exercisesContainer.appendChild(div);
+      });
+    }
 
-<footer>
-  Actividad HTML para practicar el imperfecto.
-</footer>
+    function normalizar(texto) {
+      return texto
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function corregir() {
+      let correctas = 0;
+
+      ejercicios.forEach((ej, i) => {
+        const input = document.getElementById(`q${i}`);
+        const result = document.getElementById(`r${i}`);
+        const user = normalizar(input.value);
+        const ok = normalizar(ej.respuesta);
+
+        if (user === ok) {
+          result.textContent = "✔ Correcto";
+          result.className = "result correct";
+          correctas++;
+        } else {
+          result.textContent = "✘ Incorrecto";
+          result.className = "result incorrect";
+        }
+      });
+
+      const score = document.getElementById("score");
+      score.style.display = "block";
+      score.innerHTML = `Has acertado <strong>${correctas}</strong> de <strong>${ejercicios.length}</strong> ejercicios.`;
+    }
+
+    function mostrarRespuestas() {
+      ejercicios.forEach((ej, i) => {
+        document.getElementById(`q${i}`).value = ej.respuesta;
+        const result = document.getElementById(`r${i}`);
+        result.textContent = `Respuesta: ${ej.respuesta}`;
+        result.className = "result correct";
+      });
+
+      const score = document.getElementById("score");
+      score.style.display = "block";
+      score.innerHTML = "Ahora puedes leer todas las respuestas correctas y volver a practicar.";
+    }
+
+    function reiniciar() {
+      ejercicios.forEach((ej, i) => {
+        document.getElementById(`q${i}`).value = "";
+        const result = document.getElementById(`r${i}`);
+        result.textContent = "";
+        result.className = "result";
+      });
+
+      const score = document.getElementById("score");
+      score.style.display = "none";
+      score.innerHTML = "";
+    }
+
+    crearEjercicios();
+  </script>
+</body>
+</html>
