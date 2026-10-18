@@ -34,7 +34,7 @@ body {
   font: 17px/1.6 var(--sans);
   -webkit-font-smoothing: antialiased;
 }
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: var(--vino); }
 button { font: inherit; color: inherit; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.15; margin: 0 0 .5em; letter-spacing: -.01em; }
@@ -67,6 +67,7 @@ p { margin: 0 0 1em; }
 }
 .chips a.activo { background: var(--vino); color: #fff; border-color: var(--vino); }
 .chips a.test { border-color: var(--ok); color: #3d7a00; }
+.chips a.test.activo { background: #58cc02; border-color: #58a700; color: #fff; }
 
 /* ---------- portada de unidad ---------- */
 .portada {
@@ -289,7 +290,7 @@ table.tabla th { font-size: .8rem; text-transform: uppercase; letter-spacing: .0
   display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: center;
   background: linear-gradient(160deg, #fff7e6, #fdeee0); border: 2px solid #f2d7a8;
 }
-.inicio-test img { width: 130px; }
+.inicio-test img { width: 150px; height: auto; object-fit: contain; }
 .inicio-test h3 { font-size: 1.6rem; }
 
 /* pie */
