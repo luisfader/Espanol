@@ -149,6 +149,14 @@ p { margin: 0 0 1em; }
   -webkit-tap-highlight-color: transparent; touch-action: manipulation; padding: 0 1px;
 }
 .ind:hover, .ind:focus-visible, .ind.abierta { background: #fde9c4; outline: none; }
+/* vocabulario clave (negrita, tocable) */
+.voc {
+  cursor: pointer; border-radius: 4px; padding: 0 1px; color: var(--bosque);
+  text-decoration: underline dotted #8fb39c; text-decoration-thickness: 2px; text-underline-offset: 3px;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.voc b { font-weight: 800; }
+.voc:hover, .voc:focus-visible, .voc.abierta { background: #e2f0e6; outline: none; }
 
 .traduccion {
   position: fixed; z-index: 200; width: min(300px, calc(100vw - 24px));

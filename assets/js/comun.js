@@ -187,8 +187,15 @@
   /* ---------- Diálogos ---------- */
   /** Convierte "{vi|vi_a}" en una palabra tocable con traducción. */
   function marcar(txt) {
-    return txt.replace(/\{([^|}]+)\|([^}]+)\}/g, (_, f, k) => `<span class="ind" tabindex="0" role="button" data-k="${k}">${f}</span>`);
+    const G = Object.assign({}, window.GLOSARIO_U1, window.VOCABULARIO_U1);
+    return txt.replace(/\{([^|}]+)\|([^}]+)\}/g, (_, f, k) => {
+      const clase = G[k] && G[k].inf ? "ind" : "voc"; // ind = pretérito indefinido · voc = vocabulario clave
+      const etiqueta = clase === "voc" ? `<b>${f}</b>` : f;
+      return `<span class="${clase}" tabindex="0" role="button" data-k="${k}">${etiqueta}</span>`;
+    });
   }
+  /** Marca las palabras de un texto ya escrito en el HTML: {palabra|clave} */
+  window.AV.marcarTexto = function (cont) { cont.innerHTML = marcar(cont.innerHTML); };
   const PERSONAJES = { L: ["Luis", "luis", "izq"], N: ["Natalia", "natalia", "der"], A: ["Alicia", "alicia", "izq"] };
   function lineaHTML(l, ladoNatalia) {
     const [nombre, clase, lado0] = PERSONAJES[l[0]];
@@ -222,7 +229,7 @@
 
   /* ---------- Traducciones emergentes ---------- */
   function initGlosario() {
-    const G = window.GLOSARIO_U1 || {};
+    const G = Object.assign({}, window.GLOSARIO_U1, window.VOCABULARIO_U1);
     /* Idiomas que se muestran (versión rusa). Los datos ya incluyen en, it y sr
        para futuras versiones: basta con poner, p. ej., ["en"] o window.AV_IDIOMAS. */
     const IDIOMAS = window.AV_IDIOMAS || ["ru"];
@@ -244,7 +251,7 @@
       pop.className = "traduccion"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Traducción de " + el.textContent);
       pop.innerHTML = `<button class="cerrar" type="button" aria-label="Cerrar">×</button>
         <div class="forma">${el.textContent}</div>
-        <div class="gram">Pretérito indefinido de <b>${d.inf}</b> · ${PERS[d.per] || d.per}${d.irr ? " · irregular" : ""}</div>
+        <div class="gram">${d.inf ? `Pretérito indefinido de <b>${d.inf}</b> · ${PERS[d.per] || d.per}${d.irr ? " · irregular" : ""}` : d.cat}</div>
         <dl>${IDIOMAS.filter((l) => d[l]).map((l) => `<dt>${l.toUpperCase()}</dt><dd lang="${l}">${d[l]}</dd>`).join("")}</dl>`;
       document.body.appendChild(pop);
       pop.querySelector(".cerrar").addEventListener("click", (e) => { e.stopPropagation(); cerrar(); el.focus(); });
@@ -263,22 +270,22 @@
       pop.style.left = x + "px"; pop.style.top = Math.max(8, y) + "px";
     }
     document.addEventListener("click", (e) => {
-      const el = e.target.closest(".ind");
+      const el = e.target.closest(".ind, .voc");
       if (el) { e.preventDefault(); if (actual === el && fijado) cerrar(); else abrir(el, true); return; }
       if (pop && !pop.contains(e.target)) cerrar();
     });
     document.addEventListener("keydown", (e) => {
-      const el = e.target.closest && e.target.closest(".ind");
+      const el = e.target.closest && e.target.closest(".ind, .voc");
       if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); actual === el ? cerrar() : abrir(el, true); }
       if (e.key === "Escape") cerrar();
     });
     if (puedeHover) {
       document.addEventListener("mouseover", (e) => {
-        const el = e.target.closest(".ind"); if (!el) return;
+        const el = e.target.closest(".ind, .voc"); if (!el) return;
         clearTimeout(tCerrar); if (!fijado || actual !== el) { if (fijado) return; abrir(el, false); }
       });
       document.addEventListener("mouseout", (e) => {
-        const el = e.target.closest(".ind"); if (!el || fijado) return;
+        const el = e.target.closest(".ind, .voc"); if (!el || fijado) return;
         if (pop && e.relatedTarget && pop.contains(e.relatedTarget)) return;
         tCerrar = setTimeout(cerrar, 250);
       });
