@@ -62,6 +62,7 @@
 
     <div class="tarjeta">
       <h3 class="ej-titulo"><span class="n">1</span> Leer el diálogo</h3>
+      <div class="aviso-toque"><span aria-hidden="true" style="font-size:1.4rem">👆</span><span>Toca o pasa el cursor sobre las <span class="voc ejemplo-ind"><b>palabras clave</b></span> en negrita para ver la traducción al <b>ruso</b>.</span></div>
       <div class="dos-col">
         <div class="dialogo" id="dialogo-a"></div>
         <figure class="figura ampliable" style="margin:0"><img src="assets/img/u1/dialogo-a.webp" alt="Luis y Natalia conversan y pasean por la ciudad" loading="lazy" width="1100" height="733"></figure>
@@ -427,18 +428,18 @@ AV.marcarTexto(document.getElementById("texto-sofia"));
 
 /* ---------- Diálogo A ---------- */
 AV.dialogo(document.getElementById("dialogo-a"), [
-  ["L", "Natalia, quiero conocerte un poco más. ¿Qué te gusta hacer en tu tiempo libre?"],
-  ["N", "Me gustan muchas cosas. Me gusta caminar por la ciudad, visitar cafés tranquilos y escuchar música. También me encanta leer novelas románticas."],
-  ["L", "Qué lindo. ¿Y qué tipo de música escuchas normalmente?"],
-  ["N", "Depende del día. Cuando estoy tranquila, escucho música clásica. Pero cuando estoy contenta, prefiero canciones alegres. ¿Y a ti, Luis? ¿Qué te gusta hacer?"],
-  ["L", "A mí me gusta tocar el piano, leer, aprender idiomas y mirar partidos de fútbol. También me gusta pasear sin prisa, especialmente cuando la ciudad está bonita."],
-  ["N", "Entonces tenemos algo en común: a los dos nos gusta caminar."],
-  ["L", "Sí, es verdad. ¿Te gusta caminar por lugares nuevos?"],
-  ["N", "Sí, mucho. Me gusta descubrir calles, plazas y pequeños restaurantes. Pero no me gustan los lugares con demasiado ruido."],
-  ["L", "A mí tampoco. Prefiero los lugares tranquilos, donde se puede hablar bien."],
-  ["N", "Entonces un día podemos pasear juntos por Buenos Aires."],
-  ["L", "Me encantaría. Podemos tomar un café, caminar por una avenida bonita y después elegir un lugar para cenar."],
-  ["N", "Me parece un plan perfecto."]
+  ["L", "Natalia, {quiero conocerte|a_conocerte} un poco más. ¿Qué {te gusta|a_te_gusta} hacer en tu {tiempo libre|a_tiempo_libre}?"],
+  ["N", "{Me gustan|a_me_gustan} muchas cosas. {Me gusta|a_me_gusta} {caminar|a_caminar} por la ciudad, visitar {cafés tranquilos|a_cafes} y {escuchar música|a_escuchar}. También {me encanta|a_me_encanta} leer {novelas románticas|a_novelas}."],
+  ["L", "{Qué lindo|a_que_lindo}. ¿Y qué {tipo de música|a_tipo} escuchas {normalmente|normalmente}?"],
+  ["N", "{Depende del día|a_depende}. Cuando estoy {tranquila|a_tranquila}, escucho {música clásica|a_clasica}. Pero cuando estoy {contenta|a_contenta}, {prefiero|a_prefiero} {canciones alegres|a_canciones}. ¿Y {a ti|a_a_ti}, Luis? ¿Qué te gusta hacer?"],
+  ["L", "{A mí|a_a_mi} me gusta {tocar el piano|a_piano}, leer, {aprender idiomas|a_idiomas} y mirar {partidos de fútbol|a_futbol}. También me gusta {pasear|a_pasear} {sin prisa|a_sin_prisa}, {especialmente|a_especialmente} cuando la ciudad está bonita."],
+  ["N", "Entonces {tenemos algo en común|a_comun}: {a los dos|a_los_dos} {nos gusta|a_nos_gusta} caminar."],
+  ["L", "Sí, {es verdad|a_verdad}. ¿Te gusta caminar por {lugares nuevos|a_lugares}?"],
+  ["N", "Sí, mucho. Me gusta {descubrir|a_descubrir} {calles|a_calles}, {plazas|a_plazas} y pequeños {restaurantes|a_rest}. Pero {no me gustan|a_no_gustan} los lugares con {demasiado ruido|a_ruido}."],
+  ["L", "{A mí tampoco|a_tampoco}. Prefiero los lugares tranquilos, donde {se puede|a_se_puede} hablar bien."],
+  ["N", "Entonces {un día|a_un_dia} podemos pasear {juntos|a_juntos} por Buenos Aires."],
+  ["L", "{Me encantaría|a_encantaria}. Podemos {tomar un café|a_cafe}, caminar por una {avenida|a_avenida} bonita y después {elegir|a_elegir} un lugar para {cenar|a_cenar}."],
+  ["N", "{Me parece un plan perfecto|a_plan}."]
 ]);
 
 /* ---------- Diálogo B (en escenas, con traducciones) ---------- */
