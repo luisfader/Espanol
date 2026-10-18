@@ -86,10 +86,10 @@
         <h2>${esc(E.cfg.titulo)}</h2>
         <p>${E.cfg.ejercicios.length} ejercicios · 5 corazones. Si fallas, el ejercicio vuelve al final.</p>
         <div class="t-voz">
-          ${hay ? `<label for="t-voz-sel">🔊 Voz para los ejercicios de audio</label>
+          ${hay ? `<label for="t-voz-sel">🔊 Voz (español de Estados Unidos)</label>
           <div class="fila"><select id="t-voz-sel">${opciones}</select><button type="button" id="t-voz-probar">Probar</button></div>
-          <small>Hemos elegido la voz española de mejor calidad de tu dispositivo. Puedes cambiarla. Las voces «Natural», «Online», «Google» o «Mejorada» suenan mejor.</small>`
-          : `<label>🔇 Audio no disponible</label><small>Tu navegador no tiene una voz española de calidad, así que omitiremos los ejercicios de audio. En Chrome, Edge o Safari actualizados sí funcionan.</small>`}
+          <small>Hemos elegido la voz de español de Estados Unidos de mejor calidad de tu dispositivo. Las voces «Natural», «Online», «Google» o «Mejorada» suenan mejor.</small>`
+          : `<label>🔇 Audio no disponible</label><small>Tu dispositivo no tiene una voz de español de Estados Unidos, así que omitiremos los ejercicios de audio. En Chrome, Edge o Safari actualizados sí está disponible.</small>`}
         </div></div>`;
       const sel = E.cuerpo.querySelector("#t-voz-sel");
       if (sel) {

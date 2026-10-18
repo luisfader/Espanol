@@ -1,6 +1,6 @@
 /* =========================================================
    Aquella vez — voz en español
-   Elige automáticamente la voz española de mejor calidad que
+   Usa solo voces de español de Estados Unidos (es-US) y elige la de mejor calidad que
    ofrece el dispositivo (voces neuronales "Natural"/"Online" de
    Microsoft, voces de Google, voces "Premium/Mejorada" de Apple…)
    y descarta las voces robóticas (eSpeak, compactas).
@@ -18,17 +18,15 @@
     if (/natural|neural|online/.test(n)) p += 60;            // Edge / Windows 11: voces neuronales
     if (/premium|enhanced|mejorada|siri/.test(n)) p += 50;   // Apple: voces de alta calidad
     if (/google/.test(n)) p += 40;                            // Chrome / Android
-    if (/(m[oó]nica|paulina|marisol|jorge|juan|diego|isabela|elvira|dalia|helena|laura|alvaro|álvaro|jimena|tomas|tomás|elena)/.test(n)) p += 10;
+    if (/(paloma|alonso|m[oó]nica|paulina|marisol|jorge|juan|diego|isabela|elvira|dalia|helena|laura|alvaro|álvaro|jimena|tomas|tomás|elena)/.test(n)) p += 10;
     if (/espeak|compact|compacta|robot/.test(n)) p -= 100;
     if (!v.localService) p += 5;                              // las voces en la nube suelen sonar mejor
-    const l = (v.lang || "").toLowerCase().replace("_", "-");
-    if (l === "es-es" || l === "es-mx" || l === "es-us" || l === "es-ar" || l === "es-419") p += 4;
     return p;
   }
 
   function cargar() {
     if (!sintesis) return [];
-    voces = sintesis.getVoices().filter((v) => /^es([-_]|$)/i.test(v.lang));
+    voces = sintesis.getVoices().filter((v) => /^es[-_]us$/i.test(v.lang)); // solo español de Estados Unidos
     voces.sort((a, b) => puntuar(b) - puntuar(a));
     let guardada = null;
     try { guardada = localStorage.getItem(CLAVE); } catch (e) {}

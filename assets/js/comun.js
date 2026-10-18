@@ -223,6 +223,9 @@
   /* ---------- Traducciones emergentes ---------- */
   function initGlosario() {
     const G = window.GLOSARIO_U1 || {};
+    /* Idiomas que se muestran (versión rusa). Los datos ya incluyen en, it y sr
+       para futuras versiones: basta con poner, p. ej., ["en"] o window.AV_IDIOMAS. */
+    const IDIOMAS = window.AV_IDIOMAS || ["ru"];
     let pop = null, actual = null, fijado = false, tCerrar = null;
     const puedeHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const PERS = { "yo": "1.ª persona singular (yo)", "tú": "2.ª persona singular (tú)", "él/ella": "3.ª persona singular (él / ella)", "ellas": "3.ª persona plural (ellas)" };
@@ -242,7 +245,7 @@
       pop.innerHTML = `<button class="cerrar" type="button" aria-label="Cerrar">×</button>
         <div class="forma">${el.textContent}</div>
         <div class="gram">Pretérito indefinido de <b>${d.inf}</b> · ${PERS[d.per] || d.per}${d.irr ? " · irregular" : ""}</div>
-        <dl><dt>RU</dt><dd lang="ru">${d.ru}</dd><dt>EN</dt><dd lang="en">${d.en}</dd><dt>IT</dt><dd lang="it">${d.it}</dd><dt>SR</dt><dd lang="sr">${d.sr}</dd></dl>`;
+        <dl>${IDIOMAS.filter((l) => d[l]).map((l) => `<dt>${l.toUpperCase()}</dt><dd lang="${l}">${d[l]}</dd>`).join("")}</dl>`;
       document.body.appendChild(pop);
       pop.querySelector(".cerrar").addEventListener("click", (e) => { e.stopPropagation(); cerrar(); el.focus(); });
       pop.addEventListener("mouseenter", () => clearTimeout(tCerrar));

@@ -14,9 +14,17 @@ window.TEST_U1 = {
     { tipo: "parejas", enunciado: "Une cada infinitivo con su forma «yo» en pretérito indefinido.",
       pares: [["soñar", "soñé"], ["ver", "vi"], ["hacer", "hice"], ["traer", "traje"], ["llegar", "llegué"]] },
 
-    { tipo: "ordenar", enunciado: "Escribe la frase en español.", frase: "Natalia dreamed about a ghost train.",
+    { tipo: "ordenar", enunciado: "Escribe la frase en español.", frase: "Наталье приснился поезд-призрак.",
       fichas: ["Natalia", "soñó", "con", "un", "tren", "fantasma"], distractores: ["sueña", "soñé", "de"],
       repaso: "soñar con algo → Natalia soñó con un tren fantasma." },
+
+    { tipo: "elegir", enunciado: "¿Cómo se dice en español?", frase: "Ты испугалась?", imagen: "assets/img/u1/natalia.webp",
+      opciones: ["¿Tuviste miedo?", "¿Tienes miedo?", "¿Tuvo miedo?", "¿Tuve miedo?"], correcta: 0,
+      nota: "tener miedo → tuviste (tú, pretérito indefinido).", repaso: "Ты испугалась? → ¿Tuviste miedo?" },
+
+    { tipo: "ordenar", enunciado: "Traduce al español.", frase: "Мне нравится гулять по городу.",
+      fichas: ["Me", "gusta", "caminar", "por", "la", "ciudad"], distractores: ["gustan", "Le", "en"],
+      alternativas: ["Me gusta pasear por la ciudad"], repaso: "Мне нравится + инфинитив → Me gusta + infinitivo" },
 
     { tipo: "escribir", enunciado: "Escribe el verbo en pretérito indefinido.", frase: "Esta mañana (yo) ___ algunas notas. (escribir)", imagen: "assets/img/u1/mujer-rosa.webp",
       respuesta: "escribí", repaso: "escribir → escribí (yo)" },
@@ -65,6 +73,10 @@ window.TEST_U1 = {
 
     { tipo: "escribir", enunciado: "Completa con el pretérito indefinido de «ver».", frase: "Ayer (yo) ___ algo extraño en las cartas.", imagen: "assets/img/u1/alicia-natalia.webp",
       respuesta: "vi", repaso: "ver → vi, viste, vio (sin tilde)" },
+
+    { tipo: "elegir", enunciado: "¿Qué significa?", frase: "Alicia vio algo extraño en las cartas.", imagen: "assets/img/u1/alicia-natalia.webp",
+      opciones: ["Алиса увидела что-то странное в картах.", "Алиса видит что-то странное в картах.", "Алиса увидит что-то странное в картах."], correcta: 0,
+      repaso: "vio = увидела (pretérito indefinido)" },
 
     { tipo: "elegir", enunciado: "Completa la frase.", frase: "Sofía vive en el ___, en un lugar tranquilo y frío.", imagen: "assets/img/u1/sofia.webp",
       opciones: ["norte", "sur", "mar", "desierto"], correcta: 0, repaso: "Sección C: Sofía vive en el norte." }
