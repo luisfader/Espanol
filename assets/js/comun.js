@@ -325,3 +325,97 @@
     initLibres(); initGlosario(); initLightbox(); initChips();
   });
 })();
+
+/* =========================================================
+   Lector de audio: voz + música de fondo opcional
+   <div class="lector" data-voz="..." data-musica="..."></div>
+   La música suena bajita (Web Audio, también en iPhone), entra
+   y sale con fundido, y se puede apagar para escuchar solo la voz.
+   ========================================================= */
+(function () {
+  "use strict";
+  const fmt = (s) => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+  const ICO_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+  const ICO_PAUSA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
+
+  function initLector(el) {
+    const VOL_DEF = parseFloat(el.dataset.volumen || "0.10");
+    let musicaOn = true, volMusica = VOL_DEF;
+    try { const m = localStorage.getItem("av:musica"); if (m === "0") musicaOn = false; const v = localStorage.getItem("av:musica-vol"); if (v) volMusica = parseFloat(v); } catch (e) {}
+
+    el.innerHTML = `
+      <button type="button" class="lector-play" aria-label="Escuchar el texto">${ICO_PLAY}</button>
+      <div class="lector-centro">
+        <div class="lector-titulo">Escuchar el texto</div>
+        <div class="lector-linea"><span class="lector-t">0:00</span><input type="range" class="lector-barra" min="0" max="1000" value="0" aria-label="Posición del audio"><span class="lector-d">–:––</span></div>
+      </div>
+      <div class="lector-musica">
+        <label class="interruptor"><input type="checkbox" ${musicaOn ? "checked" : ""}><span class="pista"></span><span class="txt">${musicaOn ? "🎵 Con música de fondo" : "🎙️ Solo voz"}</span></label>
+        <input type="range" class="lector-vol" min="0" max="30" value="${Math.round(volMusica * 100)}" aria-label="Volumen de la música" ${musicaOn ? "" : "disabled"}>
+      </div>`;
+    const voz = new Audio(el.dataset.voz); voz.preload = "metadata";
+    const mus = new Audio(el.dataset.musica); mus.preload = "none"; mus.loop = true;
+    const $ = (s) => el.querySelector(s);
+    const btn = $(".lector-play"), barra = $(".lector-barra"), tEl = $(".lector-t"), dEl = $(".lector-d");
+    const chk = $(".interruptor input"), vol = $(".lector-vol");
+    let ctx = null, gain = null, arrastrando = false;
+
+    function prepararWebAudio() {
+      if (ctx) return;
+      try {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const src = ctx.createMediaElementSource(mus);
+        gain = ctx.createGain(); gain.gain.value = 0;
+        src.connect(gain).connect(ctx.destination);
+      } catch (e) { ctx = null; mus.volume = 0; }
+    }
+    function fundido(destino, seg) {
+      if (gain && ctx) {
+        const g = gain.gain, ahora = ctx.currentTime;
+        g.cancelScheduledValues(ahora); g.setValueAtTime(g.value, ahora); g.linearRampToValueAtTime(destino, ahora + seg);
+      } else { mus.volume = destino; }
+    }
+    function arrancarMusica() {
+      if (!musicaOn) return;
+      prepararWebAudio(); if (ctx && ctx.state === "suspended") ctx.resume();
+      mus.play().then(() => fundido(volMusica, 1.5)).catch(() => {});
+    }
+    function pararMusica(seg) {
+      fundido(0, seg);
+      setTimeout(() => { if (voz.paused || voz.ended || !musicaOn) mus.pause(); }, seg * 1000 + 50);
+    }
+
+    btn.addEventListener("click", () => {
+      if (voz.paused) {
+        // detener otros lectores
+        document.querySelectorAll(".lector").forEach((o) => { if (o !== el && o._pausar) o._pausar(); });
+        voz.play().catch(() => {}); arrancarMusica();
+      } else { voz.pause(); }
+    });
+    el._pausar = () => { if (!voz.paused) voz.pause(); };
+    voz.addEventListener("play", () => { btn.innerHTML = ICO_PAUSA; btn.setAttribute("aria-label", "Pausa"); el.classList.add("sonando"); });
+    voz.addEventListener("pause", () => { btn.innerHTML = ICO_PLAY; btn.setAttribute("aria-label", "Escuchar el texto"); el.classList.remove("sonando"); if (!voz.ended) pararMusica(0.6); });
+    voz.addEventListener("ended", () => { pararMusica(3); voz.currentTime = 0; });
+    voz.addEventListener("loadedmetadata", () => { dEl.textContent = fmt(voz.duration); });
+    voz.addEventListener("timeupdate", () => {
+      if (arrastrando || !voz.duration) return;
+      barra.value = Math.round((voz.currentTime / voz.duration) * 1000); tEl.textContent = fmt(voz.currentTime);
+      barra.style.setProperty("--p", (barra.value / 10) + "%");
+    });
+    barra.addEventListener("input", () => { arrastrando = true; if (voz.duration) tEl.textContent = fmt(voz.duration * barra.value / 1000); barra.style.setProperty("--p", (barra.value / 10) + "%"); });
+    barra.addEventListener("change", () => { if (voz.duration) voz.currentTime = voz.duration * barra.value / 1000; arrastrando = false; });
+
+    chk.addEventListener("change", () => {
+      musicaOn = chk.checked; vol.disabled = !musicaOn;
+      $(".interruptor .txt").textContent = musicaOn ? "🎵 Con música de fondo" : "🎙️ Solo voz";
+      try { localStorage.setItem("av:musica", musicaOn ? "1" : "0"); } catch (e) {}
+      if (musicaOn && !voz.paused) arrancarMusica(); else pararMusica(0.8);
+    });
+    vol.addEventListener("input", () => {
+      volMusica = vol.value / 100;
+      try { localStorage.setItem("av:musica-vol", String(volMusica)); } catch (e) {}
+      if (musicaOn && !voz.paused) fundido(volMusica, 0.15);
+    });
+  }
+  document.addEventListener("DOMContentLoaded", () => document.querySelectorAll(".lector[data-voz]").forEach(initLector));
+})();
